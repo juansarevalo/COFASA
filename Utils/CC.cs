@@ -1,5 +1,4 @@
-﻿using Rotativa.AspNetCore.Options;
-using CoreContable.Services;
+﻿using CoreContable.Services;
 
 namespace CoreContable.Utils;
 
@@ -137,20 +136,6 @@ public abstract class CC
     public const string THIRD_LEVEL_PERMISSION_DMGPOLIZA_CAN_SEE_DETAIL = "DMGPOLIZA_CAN_SEE_DETAIL";
     public const string THIRD_LEVEL_PERMISSION_DMGPOLIZA_CAN_UNCAPITALIZE = "DMGPOLIZA_CAN_UNCAPITALIZE";
     public const string THIRD_LEVEL_PERMISSION_DMGPOLIZA_CAN_PRINT = "DMGPOLIZA_CAN_PRINT";
-
-    // public const string THIRD_LEVEL_PERMISSION_REPORTS_CAN_SEE_HISTORICO_CUENTA = "REPORTS_CAN_SEE_HISTORICO_CUENTA";
-    // public const string THIRD_LEVEL_PERMISSION_REPORTS_CAN_SEE_BALANCE_COMPROBACION = "REPORTS_CAN_SEE_BALANCE_COMPROBACION";
-
-    // REPORTES
-    public const string REPORT_TYPE_DIARIO = "diario";
-    public const string REPORT_TYPE_MAYOR = "mayor";
-    public const string DMGPOLIZA_PRINTED = "S";
-    public const string DMGPOLIZA_NOT_PRINTED = "N";
- 
-    public static Margins DEFAULT_MARGINS = new Margins(10, 10, 20, 10);
-    public const Size DEFAULT_REPORT_SIZE = Size.A4;
-    public const Orientation DEFAULT_REPORT_ORIENTATION = Orientation.Portrait;
-    public const Orientation DEFAULT_REPORT_ORIENTATION_H = Orientation.Landscape;
 
 
     public static string GetDefaultReportSwitches(string user)

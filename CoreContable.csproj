@@ -19,7 +19,6 @@
     </PackageReference>
     <PackageReference Include="NCalcSync" Version="5.2.10" />
     <PackageReference Include="NPOI" Version="2.7.0" />
-    <PackageReference Include="Rotativa.AspNetCore" Version="1.3.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.2-dev-00341" />
     <PackageReference Include="serilog.expressions" Version="5.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2" />
@@ -29,9 +28,6 @@
 
   <ItemGroup>
 	<Content Include="Logs\**">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</Content>
-	<Content Include="Rotativa\**">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
 	<Content Update="wwwroot\fonts\6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7jsDJT9g.woff2">
