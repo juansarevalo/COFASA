@@ -60,9 +60,9 @@
 
     <script>
         // Función para verificar el tamaño de la imagen y cambiarla
-        function checkLogoSize() {
-            var logoImg = document.getElementById('logo-img');
+        var logoImg = document.getElementById('logo-img');
 
+        function checkLogoSize() {
             // Verifica si el ancho de la imagen es menor a 100px
             if (logoImg.clientWidth < 100) {
                 logoImg.src = '/img/contable2.png'; 
@@ -74,11 +74,19 @@
         // Llamar la función al cargar la página
         window.addEventListener('load', checkLogoSize);
 
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                checkLogoSize();
+            }
+        });
+
+        resizeObserver.observe(logoImg);
+
         // Evaluar continuamente el tamaño de la imagen cada vez que la ventana se redimensione
-        window.addEventListener('resize', checkLogoSize);
+        //window.addEventListener('resize', checkLogoSize);
 
         // Verificar la imagen constantemente en intervalos
-        setInterval(checkLogoSize, 10);  // Verifica cada 100ms
+        //setInterval(checkLogoSize, 10);  // Verifica cada 100ms
 
     </script>
 

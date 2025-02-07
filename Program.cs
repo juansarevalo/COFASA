@@ -85,9 +85,4 @@ app.MapDefaultControllerRoute();
 app.UseSession();
 app.MapControllerRoute(name: "default", pattern: "{controller=Security}/{action=Login}");
 
-// Configuración de Rotativa para generación de PDFs
-IWebHostEnvironment env = app.Environment;
-var rotativaDriver = builder.Configuration.GetSection("Variables:RotativaDriver").Value;
-Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath, rotativaDriver);
-
 app.Run();

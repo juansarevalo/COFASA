@@ -11,7 +11,7 @@ public class CiaResultSet {
 
     public required string CodCiaCore { get; set; }
 
-    public static CiaResultSet EntityToResultSet(Cias cia) {
+    public static CiaResultSet EntityToResultSet(Companias cia) {
         return new CiaResultSet {
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
@@ -20,7 +20,7 @@ public class CiaResultSet {
         };
     }
 
-    public static CiaResultSet PartialEntityToResultSet(Cias cia) {
+    public static CiaResultSet PartialEntityToResultSet(Companias cia) {
         return new CiaResultSet {
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
