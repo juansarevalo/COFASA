@@ -4,8 +4,8 @@ using CoreContable.Utils;
 
 namespace CoreContable.Entities
 {
-    [Table(CC.CIAS, Schema = CC.SCHEMA)]
-    public class Cias
+    [Table(CC.COMPANIAS, Schema = CC.SCHEMA)]
+    public class Companias
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -23,7 +23,7 @@ namespace CoreContable.Entities
 
         [MaxLength(3)]
         [Column("COD_CIA_CORE")]
-        public required string CodCiaCore { get; set; }
+        public string? CodCiaCore { get; set; }
 
         [ForeignKey("CodCia")]
         public ICollection<UserCia>? UserCia { get; set; }

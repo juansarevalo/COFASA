@@ -40,7 +40,7 @@ namespace CoreContable {
         public DbSet<RolePermission> RolePermission { get; set; }
         public DbSet<UserApp> UserApp { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
-        public DbSet<Cias> Cias { get; set; }
+        public DbSet<Companias> Companias { get; set; }
         public DbSet<UserCia> UserCia { get; set; }
         public DbSet<DmgCuentas> DmgCuentas { get; set; }
         public DbSet<CentroCosto> CentroCosto { get; set; }

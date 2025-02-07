@@ -148,7 +148,7 @@ namespace CoreContable.Controllers {
 
             return Json(new {
                 success = result,
-                message = result ? "Access data" : "Ocurrió un error al obetener la empresa",
+                message = result ? "Access data" : "Ocurrió un error al obtener la empresa",
                 data = cia
             });
         }

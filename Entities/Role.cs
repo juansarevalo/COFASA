@@ -18,7 +18,7 @@ public class Role
 
     [MaxLength(3)]
     public required string CodCia { get; set; }
-    public virtual Cias? Cia { get; set; }
+    public virtual Companias? Cia { get; set; }
 
     [ForeignKey("IdRole")]
     public virtual List<UserRole>? UserRole { get; set; }

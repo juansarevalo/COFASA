@@ -13,7 +13,7 @@ public interface ICiasRepository
 {
     Task<List<CiaResultSet>> GetCias();
 
-    Task<Cias?> GetCiaById(string cod);
+    Task<Companias?> GetCiaById(string cod);
 
     Task<List<CiaResultSet>> GetUserCias(int userId);
 
@@ -38,7 +38,7 @@ public class CiasRepository(
 ) : ICiasRepository
 {
     public Task<List<CiaResultSet>> GetCias() =>
-        dbContext.Cias.Select(cia => new CiaResultSet
+        dbContext.Companias.Select(cia => new CiaResultSet
         {
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
@@ -46,13 +46,13 @@ public class CiasRepository(
             CodCiaCore = cia.CodCiaCore ?? ""
         }).ToListAsync();
 
-    public Task<Cias?> GetCiaById(string cod) =>
-        dbContext.Cias
+    public Task<Companias?> GetCiaById(string cod) =>
+        dbContext.Companias
             .Where(cia => cia.CodCia == cod)
             .FirstOrDefaultAsync();
 
     public Task<List<CiaResultSet>> GetUserCias(int userId) =>
-        dbContext.Cias
+        dbContext.Companias
             .Include(c => c.UserCia)
             .Where(c => c.UserCia.Any(uc => uc.UserAppId == userId))
             .Select(cia => new CiaResultSet
@@ -64,7 +64,7 @@ public class CiasRepository(
             })
             .ToListAsync();
 
-    public Task<List<CiaResultSet>> CallGetCias(string? filter = "0") => dbContext.Cias
+    public Task<List<CiaResultSet>> CallGetCias(string? filter = "0") => dbContext.Companias
         .FromSqlRaw("SELECT * FROM CONTABLE.Obtener_Empresas({0})", filter)
         .Select(cia => new CiaResultSet
         {
@@ -77,15 +77,15 @@ public class CiasRepository(
 
     public Task<List<Select2ResultSet>> CallGetCiasForSelect2(string query)
     {
-        IQueryable<Cias> efQuery;
+        IQueryable<Companias> efQuery;
 
         if (query.IsNullOrEmpty())
         {
-            efQuery = dbContext.Cias;
+            efQuery = dbContext.Companias;
         }
         else
         {
-            efQuery = dbContext.Cias
+            efQuery = dbContext.Companias
                 .Where(cia => EF.Functions.Like(cia.NomComercial, $"%{query}%")
                               || EF.Functions.Like(cia.RazonSocial, $"%{query}%"));
         }
@@ -111,6 +111,7 @@ public class CiasRepository(
             command.Parameters.Add(new SqlParameter("@COD_CIA", SqlDbType.VarChar) { Value = cia.COD_CIA });
             command.Parameters.Add(new SqlParameter("@RAZON_SOCIAL", SqlDbType.VarChar) { Value = cia.RAZON_SOCIAL==null ? DBNull.Value : cia.RAZON_SOCIAL });
             command.Parameters.Add(new SqlParameter("@NOM_COMERCIAL", SqlDbType.VarChar) { Value = cia.NOM_COMERCIAL==null ? DBNull.Value : cia.NOM_COMERCIAL });
+            command.Parameters.Add(new SqlParameter("@COD_CIA_CORE", SqlDbType.VarChar) { Value = cia.COD_CIA_CORE == null ? DBNull.Value : cia.COD_CIA_CORE });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
@@ -139,6 +140,7 @@ public class CiasRepository(
             command.Parameters.Add(new SqlParameter("@CodigoCia", SqlDbType.VarChar) { Value = cia.COD_CIA });
             command.Parameters.Add(new SqlParameter("@RAZON_SOCIAL", SqlDbType.VarChar) { Value = cia.RAZON_SOCIAL==null ? DBNull.Value : cia.RAZON_SOCIAL });
             command.Parameters.Add(new SqlParameter("@NOM_COMERCIAL", SqlDbType.VarChar) { Value = cia.NOM_COMERCIAL==null ? DBNull.Value : cia.NOM_COMERCIAL });
+            command.Parameters.Add(new SqlParameter("@COD_CIA_CORE", SqlDbType.VarChar) { Value = cia.COD_CIA_CORE == null ? DBNull.Value : cia.COD_CIA_CORE });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
@@ -178,8 +180,7 @@ public class CiasRepository(
 
     public Task<CiaResultSet?> GetOneCia(string ciaCod) {
         try {
-            var result = dbContext.Cias
-                // .FromSql($"SELECT * FROM CONTABLE.ObtenerDatosEmpresa({ciaCod})")
+            var result = dbContext.Companias
                 .Where (cia => cia.CodCia == ciaCod)
                 .Select(cia => CiaResultSet.EntityToResultSet(cia))
                 .FirstOrDefaultAsync();
@@ -191,5 +192,5 @@ public class CiasRepository(
         }
     }
 
-    public Task<int> GetCount() => dbContext.Cias.CountAsync();
+    public Task<int> GetCount() => dbContext.Companias.CountAsync();
 }
