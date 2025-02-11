@@ -21,10 +21,6 @@ namespace CoreContable.Entities
         [Column("NOM_COMERCIAL")]
         public string? NomComercial { get; set; }
 
-        [MaxLength(3)]
-        [Column("COD_CIA_CORE")]
-        public string? CodCiaCore { get; set; }
-
         [ForeignKey("CodCia")]
         public ICollection<UserCia>? UserCia { get; set; }
 
