@@ -50,7 +50,6 @@ function initGrid() {
                 { 'data': 'cod' },
                 { 'data': 'razonSocial' },
                 { 'data': 'nomComercial' },
-                { 'data': 'codCiaCore' },
                 {
                     sortable: false, searchable: false,
                     render: function (data, type, row) {
@@ -82,8 +81,10 @@ function startCiasValidation() {
         },
         submitHandler: function (form, event) {
             isLoading('#btnSaveCia', true);
-            if ($('#IS_COPYING').val()!=='') { copyCia(); }
-            else { saveCia(); }
+
+            if ($('#IS_COPYING').val() !== '') { copyCia(); }
+            else if ($('#IS_EDITING').val() !== '') { saveCia('/Cias/UpdateCia'); }
+            else { saveCia('/Cias/DoSaveCia'); }
         }
     });
 }
@@ -108,11 +109,25 @@ function showCiasForm(id, makeCopy) {
         onEscape: true
     });
 
+    if (!isEditing && !isCopying) {
+        initSelect2Paginated(
+            'COD_CIA',
+            '/Cias/GetToSelect2CiasCofasa',
+            'Compañias...'
+        );
+
+        $("#COD_CIA").on('change', function (e) {
+            loadCofasaCiaData(e.val)
+        })
+    }
+
     startCiasValidation();
 
     if (isEditing) {
+        $('#IS_EDITING').val(id);
         $('#COD_CIA').val(id);
         $('#btnSaveCiaText').text('Editar');
+        $('#companiaSelect').hide();
         loadOneCia(id);
     }
     if (isCopying) {
@@ -122,11 +137,11 @@ function showCiasForm(id, makeCopy) {
     }
 }
 
-function saveCia(){
+function saveCia(url){
     const formData = $('#ciasForm').serialize();
 
     $.ajax({
-        url: '/Cias/SaveCia',
+        url: url,
         type:'POST',
         data: formData,
         success:function(data){
@@ -184,8 +199,23 @@ function loadOneCia(id) {
     });
 }
 
+function loadCofasaCiaData(id) {
+    $.ajax({
+        url: '/Cias/GetCofasaCiaDataByCod?ciaCod=' + id,
+        type: 'GET',
+        success: function (data) {
+            if (data.success) {
+                setDataToCiaForm(data.data);
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            showToast(false, 'Ocurrió un error al obtener los detalles de la empresa');
+        }
+    });
+}
+
 function setDataToCiaForm(data) {
     $('#RAZON_SOCIAL').val(data.razonSocial);
     $('#NOM_COMERCIAL').val(data.nomComercial);
-    $('#COD_CIA_CORE').val(data.codCiaCore);
 }

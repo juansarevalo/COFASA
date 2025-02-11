@@ -4,29 +4,25 @@
             <legend class="fieldset-label">Información general</legend>
 
             <div class="row">
-                @* <div class="form-group col-12"> *@
-                @*     <label>Código de compañía</label> *@
-                @*     <input type="text" class="form-control" placeholder="COD_CIA" id="COD_CIA" name="COD_CIA" required /> *@
-                @* </div> *@
-                
-                <input type="hidden" class="form-control" placeholder="" id="COD_CIA" name="COD_CIA"/>
+                <input type="hidden" class="form-control" placeholder="" id="IS_EDITING" name="IS_EDITING" />
                 <input type="hidden" class="form-control" placeholder="" id="IS_COPYING" name="IS_COPYING"/>
+
+                <div class="form-group col-md-4" id="companiaSelect">
+                    <label class="form-label" for="COD_CIA">Compañia:</label> @* Viene de: CIAS *@
+                    <input type="hidden" class="form-control" id="COD_CIA" name="COD_CIA" />
+                </div>
+
+                <div class="col-12"></div>
                 
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-6">
                     <label>Razón social</label>
                     <input type="text" class="form-control" placeholder="" id="RAZON_SOCIAL" name="RAZON_SOCIAL"/>
                 </div>
 
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-6">
                     <label>Nombre comercial</label>
                     <input type="text" class="form-control" placeholder="" id="NOM_COMERCIAL" name="NOM_COMERCIAL">
                 </div>
-
-                <div class="form-group col-md-2">
-                    <label>Código Core</label>
-                    <input type="text" class="form-control" placeholder="" id="COD_CIA_CORE" name="COD_CIA_CORE">
-                </div>
-
             </div>
         </fieldset>
 
