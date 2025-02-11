@@ -1,0 +1,139 @@
+﻿<style >
+    .nav-pills .nav-link {
+        color: #FEECE2 !important;
+    }
+
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: #fff;
+        background-color: #301D71;
+    }
+
+    .bg-primary {
+        background-color: #301D71 !important;
+        border-color: #301D71 !important;
+    }
+
+    .bg-secondary {
+        background-color: #5a4780 !important;
+        border-color: #5a4780 !important;
+    }
+
+    .bg-success {
+        background-color: #4caf50 !important;
+        border-color: #4caf50 !important;
+    }
+
+    .bg-info {
+        background-color: #2196f3 !important;
+        border-color: #2196f3 !important;
+    }
+
+    .bg-warning {
+        background-color: #ffb74d !important;
+        border-color: #ffb74d !important;
+    }
+
+    .bg-danger {
+        background-color: #e53935 !important;
+        border-color: #e53935 !important;
+    }
+
+    .bg-light {
+        background-color: #f4f4f9 !important;
+        border-color: #f4f4f9 !important;
+    }
+
+    .bg-dark {
+        background-color: #201c4b !important;
+        border-color: #201c4b !important;
+    }
+
+</style>
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar elevation-4" style="background-color:#221451">
+
+    <!-- Brand Logo -->
+    <a asp-action="index" asp-controller="home" class="brand-link d-flex align-items-center justify-content-center position-relative overflow-hidden" style="height: 100px;">
+        <img id="logo-img" src="~/img/contable.png" alt="Logo CONTABLE" class="w-75 h-auto position-relative" style="filter: brightness(0) invert(1);">
+    </a>
+
+    <script>
+        // Función para verificar el tamaño de la imagen y cambiarla
+        var logoImg = document.getElementById('logo-img');
+
+        function checkLogoSize() {
+            // Verifica si el ancho de la imagen es menor a 100px
+            if (logoImg.clientWidth < 100) {
+                logoImg.src = '/img/contable2.png'; 
+            } else {
+                logoImg.src = '/img/contable.png';   
+            }
+        }
+
+        // Llamar la función al cargar la página
+        window.addEventListener('load', checkLogoSize);
+
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                checkLogoSize();
+            }
+        });
+
+        resizeObserver.observe(logoImg);
+
+        // Evaluar continuamente el tamaño de la imagen cada vez que la ventana se redimensione
+        //window.addEventListener('resize', checkLogoSize);
+
+        // Verificar la imagen constantemente en intervalos
+        //setInterval(checkLogoSize, 10);  // Verifica cada 100ms
+
+    </script>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                @foreach (var father in Model)
+                {
+                    @if (father.FatherVisibility)
+                    {
+                        <li class="nav-item parent" id="menu_@father.FatherId">
+                            <a href="@father.FatherUrl" class="nav-link">
+                                <i class="nav-icon @father.FatherIcon"></i>
+                                <p>
+                                    @father.FatherName
+                                    @if (father.ChildrenList != null && father.ChildrenList.Count > 0)
+                                    {
+                                        <i class="right fas fa-angle-left"></i>
+                                    }
+                                </p>
+                            </a>
+                            @if (father.ChildrenList != null && father.ChildrenList.Count > 0)
+                            {
+                                <ul class="nav nav-treeview">
+                                    @foreach (var children in father.ChildrenList)
+                                    {
+                                        @if (children.ChildrenVisibility)
+                                        {
+                                            <li class="nav-item" id="menu_@children.ChildrenId">
+                                                <a href="@children.ChildrenUrl" class="nav-link">
+                                                    <i class="nav-icon @children.ChildrenIcon"></i>
+                                                    <p>@children.ChildrenName</p>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
