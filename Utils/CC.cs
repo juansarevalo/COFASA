@@ -33,7 +33,7 @@ public abstract class CC
     public const string AC_MON_MONEDA = "ac_mon_moneda";
     public const string CENTRO_COSTO = "centro_costo";
     public const string CENTRO_CUENTA = "centro_cuenta";
-    public const string CIAS = "cias";
+    public const string COMPANIAS = "COMPANIAS";
     public const string DET_REPOSITORIO = "det_repositorio";
     public const string DMG_CIE_CIERRE = "dmg_cie_cierre";
     public const string DMGCUENTAS = "dmgcuentas";

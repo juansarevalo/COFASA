@@ -26,6 +26,7 @@ public class SecurityController(
 
     [HttpPost]
     [AllowAnonymous]
+    [ValidateAntiForgeryToken]
     public async Task<ActionResult> Login(LoginViewModel model, string? returnUrl) {
         model.Cias = await ciasRepository.GetCias();
 

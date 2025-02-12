@@ -37,7 +37,6 @@
                 <th>Código</th>
                 <th>Razón social</th>
                 <th>Nombre comercial</th>
-                <th>Dirección</th>
                 <th style="width: 10%;">Acciones</th>
             </tr>
             </thead>
@@ -64,9 +63,9 @@
         
         @if (SecurityRepository.GetSessionUserPermissionList().Contains(CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_COPY))
         {
-            <button class='btn btn-primary btn-sm button-detail' data-action="copy" title="Crear una copia">
-                <i class="fa fa-files-o" aria-hidden="true"></i>
-            </button>
+            @*<button class='btn btn-primary btn-sm button-detail' data-action="copy" title="Crear una copia">*@
+            @*    <i class="fa fa-files-o" aria-hidden="true"></i>*@
+            @*</button>*@
         }
     </div>
 </textarea>
