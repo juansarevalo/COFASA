@@ -16,5 +16,5 @@ public class UserCia
     public string CodCia { get; set; }
 
     public virtual UserApp UserApp { get; set; }
-    public virtual Cias Cia { get; set; }
+    public virtual Companias Cia { get; set; }
 }

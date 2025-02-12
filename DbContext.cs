@@ -19,6 +19,7 @@ namespace CoreContable {
             modelBuilder.Entity<UserMenuPermissionFromFunctionResult>(e => e.HasNoKey());
             modelBuilder.Entity<ValidateUserOnLoginFromFunctionResult>(e => e.HasNoKey());
             modelBuilder.Entity<ConsultarCentroCuentaFromFunc>(e => e.HasNoKey());
+            modelBuilder.Entity<GetCofasaCodCiasFromFunctionResult>(e => e.HasNoKey());
 
             // Varias llaves primarias
             modelBuilder.Entity<CentroCuenta>().HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO, x.CTA_1, x.CTA_2, x.CTA_3, x.CTA_4, x.CTA_5, x.CTA_6 });
@@ -40,7 +41,7 @@ namespace CoreContable {
         public DbSet<RolePermission> RolePermission { get; set; }
         public DbSet<UserApp> UserApp { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
-        public DbSet<Cias> Cias { get; set; }
+        public DbSet<Companias> Companias { get; set; }
         public DbSet<UserCia> UserCia { get; set; }
         public DbSet<DmgCuentas> DmgCuentas { get; set; }
         public DbSet<CentroCosto> CentroCosto { get; set; }
@@ -58,5 +59,6 @@ namespace CoreContable {
         public DbSet<UserMenuPermissionFromFunctionResult> UserMenuPermissionFromFunctionResult { get; set; }
         public DbSet<ValidateUserOnLoginFromFunctionResult> ValidateUserOnLoginFromFunctionResult { get; set; }
         public DbSet<ConsultarCentroCuentaFromFunc> ConsultarCentroCuentaFromFunc { get; set; }
+        public DbSet<GetCofasaCodCiasFromFunctionResult> GetCofasaCodCiasFromFunctionResult { get; set; }
     }
 }
