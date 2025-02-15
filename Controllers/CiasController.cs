@@ -46,6 +46,7 @@ namespace CoreContable.Controllers {
             bool result;
 
             try {
+                data.UsuarioCreacion = securityRepository.GetSessionUserName();
                 result = await ciasRepository.CallSaveCia(cia: data);
             }
             catch (Exception e) {
@@ -67,6 +68,7 @@ namespace CoreContable.Controllers {
             bool result;
 
             try {
+                data.UsuarioModificacion = securityRepository.GetSessionUserName();
                 result = await ciasRepository.CallUpdateCia(data);
             }
             catch (Exception e) {
@@ -101,29 +103,6 @@ namespace CoreContable.Controllers {
             return Json(new {
                 success = result,
                 message = result ? "Access data" : "Ocurrió un error al obtener la empresa",
-                data = cia
-            });
-        }
-
-        [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_ADD)]
-        [HttpGet]
-        public async Task<JsonResult> GetCofasaCiaDataByCod([FromQuery] string ciaCod) {
-            bool result;
-            CiaResultSet? cia = null;
-
-            try {
-                cia = await ciasRepository.GetCofasaCiaData(ciaCod);
-                result = true;
-            }
-            catch (Exception e) {
-                result = false;
-                logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                    nameof(CiasController), nameof(GetCiaById));
-            }
-
-            return Json(new {
-                success = result,
-                message = result ? "Access data" : "Ocurrió un error al obtener los datos de la empresa",
                 data = cia
             });
         }
@@ -178,11 +157,9 @@ namespace CoreContable.Controllers {
             });
         }
 
-        [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_ADD}," +
-                             $"{CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_UPDATE}" +
-                             $"{CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_COPY}")]
+        [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_ADD)]
         [HttpGet]
-        public async Task<JsonResult> GetToSelect2CiasCofasa([FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
+        public async Task<JsonResult> GetToSelect2CofasaCias([FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
             var cias = new List<Select2ResultSet>();
             var currentCia = securityRepository.GetSessionCiaCode();
 
@@ -191,12 +168,35 @@ namespace CoreContable.Controllers {
             }
             catch (Exception e) {
                 logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                    nameof(ciasRepository), nameof(GetToSelect2));
+                    nameof(CiasController), nameof(GetToSelect2CofasaCias));
             }
 
             return Json(new {
                 results = cias,
                 more = cias.Count > 0 ? cias.Last().more : false
+            });
+        }
+
+        [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_CIAS_CAN_ADD)]
+        [HttpGet]
+        public async Task<JsonResult> GetCofasaCiaDataByCod([FromQuery] string ciaCod) {
+            bool result;
+            CiaResultSet? cia = null;
+
+            try {
+                cia = await ciasRepository.GetCofasaCiaData(ciaCod);
+                result = true;
+            }
+            catch (Exception e) {
+                result = false;
+                logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                    nameof(CiasController), nameof(GetCofasaCiaDataByCod));
+            }
+
+            return Json(new {
+                success = result,
+                message = result ? "Access data" : "Ocurrió un error al obtener los datos de la empresa",
+                data = cia
             });
         }
     }

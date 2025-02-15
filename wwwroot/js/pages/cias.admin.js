@@ -112,7 +112,7 @@ function showCiasForm(id, makeCopy) {
     if (!isEditing && !isCopying) {
         initSelect2Paginated(
             'COD_CIA',
-            '/Cias/GetToSelect2CiasCofasa',
+            '/Cias/GetToSelect2CofasaCias',
             'Compañias...'
         );
 

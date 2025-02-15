@@ -16,12 +16,4 @@ public class CiaResultSet {
             NomComercial = cia.NomComercial ?? "",
         };
     }
-
-    public static CiaResultSet PartialEntityToResultSet(Companias cia) {
-        return new CiaResultSet {
-            Cod = cia.CodCia,
-            RazonSocial = cia.RazonSocial ?? "",
-            NomComercial = cia.NomComercial ?? "",
-        };
-    }
 }

@@ -118,4 +118,46 @@ public class DmgCuentasController(
             data = result
         }, new JsonSerializerOptions { PropertyNamingPolicy = null });
     }
+
+    [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_DMGCUENTAS_CAN_ADD)]
+    [HttpGet]
+    public async Task<JsonResult> GetToSelect2CofasaCatalogo([FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
+        var catalogo = new List<Select2ResultSet>();
+
+        try {
+            catalogo = await dmgCuentasRepository.CallGetCofasaCatalogoForSelect2(q, page, pageSize);
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(DmgCuentasController), nameof(GetToSelect2CofasaCatalogo));
+        }
+
+        return Json(new {
+            results = catalogo,
+            more = catalogo.Count > 0 ? catalogo.Last().more : false
+        });
+    }
+
+    [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_DMGCUENTAS_CAN_ADD)]
+    [HttpGet]
+    public async Task<JsonResult> GetCofasaCatalogoDataById([FromQuery] string id) {
+        bool result;
+        DmgCuentasResultSet? cuenta = null;
+
+        try {
+            cuenta = await dmgCuentasRepository.GetCofasaCatalogData(id);
+            result = true;
+        }
+        catch (Exception e) {
+            result = false;
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(DmgCuentasController), nameof(GetCofasaCatalogoDataById));
+        }
+
+        return Json(new {
+            success = result,
+            message = result ? "Access data" : "Ocurrió un error al obtener los datos de la empresa",
+            data = cuenta
+        }, new JsonSerializerOptions { PropertyNamingPolicy = null });
+    }
 }
