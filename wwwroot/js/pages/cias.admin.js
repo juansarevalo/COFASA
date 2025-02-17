@@ -50,6 +50,7 @@ function initGrid() {
                 { 'data': 'cod' },
                 { 'data': 'razonSocial' },
                 { 'data': 'nomComercial' },
+                { 'data': 'nrc'},
                 {
                     sortable: false, searchable: false,
                     render: function (data, type, row) {
@@ -70,11 +71,13 @@ function startCiasValidation() {
             // COD_CIA: { required: true, minlength: 3, maxlength: 3 },
             RAZON_SOCIAL: { required: true, minlength: 3, maxlength: 60 },
             NOM_COMERCIAL: { required: true, minlength: 3, maxlength: 60 },
+            NRC: { required: true, minlength: 3, maxlength: 20 },
         },
         messages:{
             // COD_CIA: 'Este campo es obligatorio',
             RAZON_SOCIAL: 'Este campo es obligatorio',
             NOM_COMERCIAL: 'Este campo es obligatorio',
+            NRC: 'Este campo es obligatorio',
         },
         showErrors: function(errorMap, errorList) {
             this.defaultShowErrors();
@@ -218,4 +221,5 @@ function loadCofasaCiaData(id) {
 function setDataToCiaForm(data) {
     $('#RAZON_SOCIAL').val(data.razonSocial);
     $('#NOM_COMERCIAL').val(data.nomComercial);
+    $('#NRC').val(data.nrc);
 }
