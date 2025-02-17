@@ -21,24 +21,23 @@ public interface ICiasRepository
 
     Task<List<Select2ResultSet>> CallGetCiasForSelect2(string query);
 
-    Task<List<Select2ResultSet>> CallGetCofasaCiasForSelect2(
-    string codCia, string? query = null, int pageNumber = 1, int pageSize = 10);
-
     Task<bool> CallSaveCia(CiaDto cia);
 
     Task<bool> CallUpdateCia(CiaDto cia);
 
     Task<CiaResultSet?> GetOneCia(string ciaCod);
 
-    Task<CiaResultSet?> GetCofasaCiaData(string ciaCod);
-
     Task<int> GetCount();
+
+    Task<List<Select2ResultSet>> CallGetCofasaCiasForSelect2(
+    string codCia, string? query = null, int pageNumber = 1, int pageSize = 10);
+
+    Task<CiaResultSet?> GetCofasaCiaData(string ciaCod);
 }
 
 public class CiasRepository(
     DbContext dbContext,
-    ILogger<CiasRepository> logger,
-    ISecurityRepository securityRepository
+    ILogger<CiasRepository> logger
 ) : ICiasRepository
 {
     public Task<List<CiaResultSet>> GetCias() =>
@@ -47,6 +46,7 @@ public class CiasRepository(
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
             NomComercial = cia.NomComercial ?? "",
+            NRC = cia.NRC ?? ""
         }).ToListAsync();
 
     public Task<Companias?> GetCiaById(string cod) =>
@@ -73,6 +73,7 @@ public class CiasRepository(
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
             NomComercial = cia.NomComercial ?? "",
+            NRC = cia.NRC ?? ""
         })
         .ToListAsync();
 
@@ -100,29 +101,6 @@ public class CiasRepository(
             .ToListAsync();
     }
 
-    public Task<List<Select2ResultSet>> CallGetCofasaCiasForSelect2(string codCia, string? query = null, int pageNumber = 1, int pageSize = 10) 
-        {
-        IQueryable<GetCofasaCodCiasFromFunctionResult> efQuery;
-
-        if (query.IsNullOrEmpty()) {
-            efQuery = dbContext.GetCofasaCodCiasFromFunctionResult
-                .FromSqlRaw("SELECT * FROM contable.fn_get_codigos_compania()");
-        }
-        else {
-            efQuery = dbContext.GetCofasaCodCiasFromFunctionResult
-                .FromSqlRaw("SELECT * FROM contable.fn_get_codigos_compania()")
-                .Where(cia => EF.Functions.Like(cia.COD_CIA, $"%{query}%")
-                              || EF.Functions.Like(cia.NOM_COMERCIAL, $"%{query}%"));
-        }
-
-        return efQuery
-            .Select(cia => new Select2ResultSet {
-                id = cia.COD_CIA,
-                text = cia.NOM_COMERCIAL ?? ""
-            })
-            .ToListAsync();
-    }
-
     public async Task<bool> CallSaveCia(CiaDto cia)
     {
         var command = dbContext.Database.GetDbConnection().CreateCommand();
@@ -135,7 +113,8 @@ public class CiasRepository(
             command.Parameters.Add(new SqlParameter("@COD_CIA", SqlDbType.VarChar) { Value = cia.COD_CIA });
             command.Parameters.Add(new SqlParameter("@RAZON_SOCIAL", SqlDbType.VarChar) { Value = cia.RAZON_SOCIAL==null ? DBNull.Value : cia.RAZON_SOCIAL });
             command.Parameters.Add(new SqlParameter("@NOM_COMERCIAL", SqlDbType.VarChar) { Value = cia.NOM_COMERCIAL==null ? DBNull.Value : cia.NOM_COMERCIAL });
-            command.Parameters.Add(new SqlParameter("@UsuarioCreacion", SqlDbType.VarChar) { Value = securityRepository.GetSessionUserId()});
+            command.Parameters.Add(new SqlParameter("@NRC", SqlDbType.VarChar) { Value = cia.NRC == null ? DBNull.Value : cia.NRC });
+            command.Parameters.Add(new SqlParameter("@UsuarioCreacion", SqlDbType.VarChar) { Value = cia.UsuarioCreacion == null ? DBNull.Value : cia.UsuarioCreacion });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
@@ -164,7 +143,8 @@ public class CiasRepository(
             command.Parameters.Add(new SqlParameter("@CodigoCia", SqlDbType.VarChar) { Value = cia.COD_CIA });
             command.Parameters.Add(new SqlParameter("@RAZON_SOCIAL", SqlDbType.VarChar) { Value = cia.RAZON_SOCIAL==null ? DBNull.Value : cia.RAZON_SOCIAL });
             command.Parameters.Add(new SqlParameter("@NOM_COMERCIAL", SqlDbType.VarChar) { Value = cia.NOM_COMERCIAL==null ? DBNull.Value : cia.NOM_COMERCIAL });
-            command.Parameters.Add(new SqlParameter("@UsuarioModificacion", SqlDbType.VarChar) { Value = securityRepository.GetSessionUserId() });
+            command.Parameters.Add(new SqlParameter("@NRC", SqlDbType.VarChar) { Value = cia.NRC == null ? DBNull.Value : cia.NRC });
+            command.Parameters.Add(new SqlParameter("@UsuarioModificacion", SqlDbType.VarChar) { Value = cia.UsuarioModificacion == null ? DBNull.Value : cia.UsuarioModificacion });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
@@ -195,6 +175,30 @@ public class CiasRepository(
         }
     }
 
+    public Task<int> GetCount() => dbContext.Companias.CountAsync();
+
+    public Task<List<Select2ResultSet>> CallGetCofasaCiasForSelect2(string codCia, string? query = null, int pageNumber = 1, int pageSize = 10) {
+        IQueryable<Companias> efQuery;
+
+        if (query.IsNullOrEmpty()) {
+            efQuery = dbContext.Companias
+                .FromSqlRaw("SELECT * FROM contable.fn_get_codigos_compania()");
+        }
+        else {
+            efQuery = dbContext.Companias
+                .FromSqlRaw("SELECT * FROM contable.fn_get_codigos_compania()")
+                .Where(cia => EF.Functions.Like(cia.CodCia, $"%{query}%")
+                              || EF.Functions.Like(cia.NomComercial, $"%{query}%"));
+        }
+
+        return efQuery
+            .Select(cia => new Select2ResultSet {
+                id = cia.CodCia,
+                text = cia.NomComercial ?? ""
+            })
+            .ToListAsync();
+    }
+
     public Task<CiaResultSet?> GetCofasaCiaData(string ciaCod) {
         try {
             var result = dbContext.Companias
@@ -209,6 +213,4 @@ public class CiasRepository(
             return Task.FromResult<CiaResultSet?>(null);
         }
     }
-
-    public Task<int> GetCount() => dbContext.Companias.CountAsync();
 }

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 overrideIds({
     addButtonId: 'addDmgCuentas',
@@ -78,9 +78,36 @@ function overrideShowForm(data) {
             $('#isUpdating').val(data.COD_CIA);
             $(`#${initValues.formAddButtonTextId}`).text('Editar');
             overrideLoadOne(data);
+        } else {
+            initSelect2Paginated(
+                'idCatalogo',
+                '/DmgCuentas/GetToSelect2CofasaCatalogo',
+                'Catálogo...'
+            );
+
+            $("#idCatalogo").on('change', function (e) {
+                loadCofasaCatalogoData(e.val)
+            })
         }
     });
 }
+
+function loadCofasaCatalogoData(id) {
+    $.ajax({
+        url: '/DmgCuentas/GetCofasaCatalogoDataById?id=' + id,
+        type: 'GET',
+        success: function (data) {
+            if (data.success) {
+                setFormData(data.data);
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            showToast(false, 'Ocurrió un error al obtener los datos de la cuenta');
+        }
+    });
+}
+
 
 function resetPrincipalAccountNumbers() {
     $('#CTA_1P').val('');
