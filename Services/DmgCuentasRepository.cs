@@ -1,9 +1,12 @@
 using System.Data;
+using CoreContable.Entities;
 using CoreContable.Models.Dto;
 using CoreContable.Models.ResultSet;
 using CoreContable.Utils;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CoreContable.Services;
 
@@ -22,6 +25,10 @@ public interface IDmgCuentasRepository
     Task<bool> GenerarPartidaLiquidacion (string codCia, int año);
 
     Task<bool> MayorizarMes (string codCia, int periodo, int año, int mes);
+
+    public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10);
+
+    public Task<DmgCuentasResultSet?> GetCofasaCatalogData(string id);
 }
 
 public class DmgCuentasRepository(
@@ -56,36 +63,8 @@ public class DmgCuentasRepository(
                 data.Cta4,
                 data.Cta5,
                 data.Cta6
-            ).Select(entity => new DmgCuentasResultSet
-            {
-                COD_CIA = entity.COD_CIA,
-                CTA_1 = entity.CTA_1,
-                CTA_2 = entity.CTA_2,
-                CTA_3 = entity.CTA_3,
-                CTA_4 = entity.CTA_4,
-                CTA_5 = entity.CTA_5,
-                CTA_6 = entity.CTA_6,
-                DESCRIP_ESP = entity.DESCRIP_ESP,
-                DESCRIP_ING = entity.DESCRIP_ING,
-                ACEP_MOV = entity.ACEP_MOV,
-                ACEP_PRESUP = entity.ACEP_PRESUP,
-                ACEP_ACTIV = entity.ACEP_ACTIV,
-                GRUPO_CTA = entity.GRUPO_CTA,
-                CLASE_SALDO = entity.CLASE_SALDO,
-                CTA_1P = entity.CTA_1P,
-                CTA_2P = entity.CTA_2P,
-                CTA_3P = entity.CTA_3P,
-                CTA_4P = entity.CTA_4P,
-                CTA_5P = entity.CTA_5P,
-                CTA_6P = entity.CTA_6P,
-                CTA_FLUJO = entity.CTA_FLUJO,
-                UTIL_CTA = entity.UTIL_CTA,
-                ACEP_PRESUP_COMPRAS = entity.ACEP_PRESUP_COMPRAS,
-                BANDERA = entity.BANDERA,
-                Catalogo = entity.Catalogo,
-                Grupo_Nivel = entity.Grupo_Nivel,
-                Sub_Grupo = entity.Sub_Grupo,
-            })
+            )
+            .Select(entity => DmgCuentasResultSet.EntityToResultSet(entity))
             .FirstOrDefaultAsync();
 
     public async Task<bool> SaveOrUpdate (DmgCuentasDto data) {
@@ -234,5 +213,51 @@ public class DmgCuentasRepository(
         }
     }
 
+    public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10) {
+        try {
+            IQueryable<DmgCuentas> efQuery = dbContext.DmgCuentas
+                .FromSqlRaw("SELECT DESCRIP_ESP FROM contable.fn_get_ids_catalogo()");
 
+            if (!query.IsNullOrEmpty()) {
+                efQuery = dbContext.DmgCuentas
+                    .Where(
+                        entity =>
+                            EF.Functions.Like(entity.DESCRIP_ESP, $"%{query}%") 
+                            || EF.Functions.Like(entity.DESCRIP_ING, $"%{query}%")
+                    );
+            }
+
+            var count = efQuery.Count();
+
+            return efQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(entity => new Select2ResultSet {
+                    id = entity.DESCRIP_ESP,
+                    text = entity.DESCRIP_ESP,
+                    more = pageNumber * pageSize < count
+                })
+                .ToListAsync();
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(DmgCuentasRepository), nameof(CallGetCofasaCatalogoForSelect2));
+            return Task.FromResult(new List<Select2ResultSet>());
+        }
+    }
+
+    public Task<DmgCuentasResultSet?> GetCofasaCatalogData(string id) {
+        try {
+            var result = dbContext.DmgCuentas
+                .FromSqlRaw("SELECT * FROM contable.fn_get_catalogo({0})", id)
+                .Select(cuenta => DmgCuentasResultSet.EntityToResultSet(cuenta))
+                .FirstOrDefaultAsync();
+            return result;
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(SecurityRepository), nameof(GetCofasaCatalogData));
+            return Task.FromResult<DmgCuentasResultSet?>(null);
+        }
+    }
 }

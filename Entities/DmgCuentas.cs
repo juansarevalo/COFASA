@@ -20,7 +20,7 @@ public class DmgCuentas
     public required int CTA_6 { get; set; }
 
     [MaxLength(70)]
-    public string? DESCRIP_ESP { get; set; }
+    public required string DESCRIP_ESP { get; set; }
     [MaxLength(70)]
     public string? DESCRIP_ING { get; set; }
 

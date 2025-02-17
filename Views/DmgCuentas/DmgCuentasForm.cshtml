@@ -1,18 +1,28 @@
-<form role="form" id="dmgCuentasForm" style="margin-left:15px; margin-right:15px;">
+﻿<form role="form" id="dmgCuentasForm" style="margin-left:15px; margin-right:15px;">
     <div class="col-md-12">
         <div class="row">
             <input type="hidden" class="form-control" placeholder="" id="isUpdating" name="isUpdating" jv-required="false"/>
             <input type="hidden" class="form-control" placeholder="" id="COD_CIA" name="COD_CIA" jv-required="true" jv-minlength="3" jv-maxlength="3"/>
-            
-            <div class="form-group col-md-12">
-                <label>Nombre</label>
+
+            <div class="form-group col-md-6" id="catalogoSelect">
+                <label class="form-label" for="idCatalogo">Catálogo:</label> @* Viene de: DmgCuentas *@
+                <input type="hidden" class="form-control" id="idCatalogo" name="idCatalogo" />
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Cuenta Contable</label>
+                <input type="text" class="form-control" placeholder="" id="cuentaContable" name="cuentaContable" jv-required="true" jv-minlength="2" jv-maxlength="100" />
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Descripción Español</label>
                 <input type="text" class="form-control" placeholder="" id="DESCRIP_ESP" name="DESCRIP_ESP" jv-required="true" jv-minlength="2" jv-maxlength="100"/>
             </div>
 
-            @* <div class="form-group col-md-6"> *@
-            @*     <label>Descripci&oacute;n Ingl&eacute;s</label> *@
-            @*     <input type="text" class="form-control" placeholder="" id="DESCRIP_ING" name="DESCRIP_ING" jv-required="false" jv-minlength="2" jv-maxlength="70"> *@
-            @* </div> *@
+            <div class="form-group col-md-6">
+                <label>Descripción Inglés</label>
+                <input type="text" class="form-control" placeholder="" id="DESCRIP_ING" name="DESCRIP_ING" jv-required="false" jv-minlength="2" jv-maxlength="70">
+            </div>
         </div>
 
         <div class="row">
@@ -68,7 +78,7 @@
             <div class="col-md-12">
                 <table>
                     <tr>
-                        <td style="width: 30%;"><label class="form-label">Cuenta contable:</label></td>
+                        <td style="width: 30%;"><label class="form-label">Cuenta ThinkCore:</label></td>
                         <td><input type="text" name="CTA_1" id="CTA_1" class="form-control" jv-required="true" jv-digits="true"/></td>
                         <td><input type="text" name="CTA_2" id="CTA_2" class="form-control" jv-required="true" jv-digits="true"/></td>
                         <td><input type="text" name="CTA_3" id="CTA_3" class="form-control" jv-required="true" jv-digits="true"/></td>
@@ -78,7 +88,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 d-none">
                 <table>
                     <tr>
                         <td style="width: 30%;"><label class="form-label">Cuenta principal de agrupaci&oacute;n:</label></td>
