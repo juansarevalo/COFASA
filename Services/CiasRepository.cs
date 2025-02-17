@@ -46,6 +46,7 @@ public class CiasRepository(
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
             NomComercial = cia.NomComercial ?? "",
+            NRC = cia.NRC ?? ""
         }).ToListAsync();
 
     public Task<Companias?> GetCiaById(string cod) =>
@@ -72,6 +73,7 @@ public class CiasRepository(
             Cod = cia.CodCia,
             RazonSocial = cia.RazonSocial ?? "",
             NomComercial = cia.NomComercial ?? "",
+            NRC = cia.NRC ?? ""
         })
         .ToListAsync();
 
@@ -111,6 +113,7 @@ public class CiasRepository(
             command.Parameters.Add(new SqlParameter("@COD_CIA", SqlDbType.VarChar) { Value = cia.COD_CIA });
             command.Parameters.Add(new SqlParameter("@RAZON_SOCIAL", SqlDbType.VarChar) { Value = cia.RAZON_SOCIAL==null ? DBNull.Value : cia.RAZON_SOCIAL });
             command.Parameters.Add(new SqlParameter("@NOM_COMERCIAL", SqlDbType.VarChar) { Value = cia.NOM_COMERCIAL==null ? DBNull.Value : cia.NOM_COMERCIAL });
+            command.Parameters.Add(new SqlParameter("@NRC", SqlDbType.VarChar) { Value = cia.NRC == null ? DBNull.Value : cia.NRC });
             command.Parameters.Add(new SqlParameter("@UsuarioCreacion", SqlDbType.VarChar) { Value = cia.UsuarioCreacion == null ? DBNull.Value : cia.UsuarioCreacion });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
@@ -140,6 +143,7 @@ public class CiasRepository(
             command.Parameters.Add(new SqlParameter("@CodigoCia", SqlDbType.VarChar) { Value = cia.COD_CIA });
             command.Parameters.Add(new SqlParameter("@RAZON_SOCIAL", SqlDbType.VarChar) { Value = cia.RAZON_SOCIAL==null ? DBNull.Value : cia.RAZON_SOCIAL });
             command.Parameters.Add(new SqlParameter("@NOM_COMERCIAL", SqlDbType.VarChar) { Value = cia.NOM_COMERCIAL==null ? DBNull.Value : cia.NOM_COMERCIAL });
+            command.Parameters.Add(new SqlParameter("@NRC", SqlDbType.VarChar) { Value = cia.NRC == null ? DBNull.Value : cia.NRC });
             command.Parameters.Add(new SqlParameter("@UsuarioModificacion", SqlDbType.VarChar) { Value = cia.UsuarioModificacion == null ? DBNull.Value : cia.UsuarioModificacion });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
