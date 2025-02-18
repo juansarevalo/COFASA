@@ -57,6 +57,15 @@ public class CentroCostoController (
                 data.FECHA_CREACION = DateTime.Now;
                 data.USUARIO_CREACION = securityRepository.GetSessionUserName ( );
                 isUpdating = false;
+
+                var isExists = await centroCostoRepository.GetOne(data.COD_CIA, data.CENTRO_COSTO);
+
+                if (isExists != null) {
+                    return Json(new {
+                        success = false,
+                        message = "Ya existe un centro de costo con este código"
+                    });
+                }
             }
             else {
                 data.FECHA_MODIFICACION = DateTime.Now;
