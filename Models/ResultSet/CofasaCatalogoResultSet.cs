@@ -1,4 +1,5 @@
 using CoreContable.Entities;
+using CoreContable.Entities.FuntionResult;
 
 namespace CoreContable.Models.ResultSet;
 
@@ -14,7 +15,7 @@ public class CofasaCatalogoResultSet {
 
     public string? CLASE_SALDO { get; set; }
 
-    public static CofasaCatalogoResultSet EntityToResultSet(DmgCuentas entity) {
+    public static CofasaCatalogoResultSet EntityToResultSet(ConsultarCofasaCatalogoFromFunc entity) {
         return new CofasaCatalogoResultSet {
             DESCRIP_ESP = entity.DESCRIP_ESP ?? "",
             DESCRIP_ING = entity.DESCRIP_ING ?? "",

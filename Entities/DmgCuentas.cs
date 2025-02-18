@@ -12,7 +12,7 @@ public class DmgCuentas
     [MaxLength(3)]
     public required string COD_CIA { get; set; }
 
-    public string? idCatalogo { get; set; }
+    public int? idCatalogo { get; set; }
 
     public required int CTA_1 { get; set; }
     public required int CTA_2 { get; set; }
