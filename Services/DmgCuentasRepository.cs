@@ -216,14 +216,15 @@ public class DmgCuentasRepository(
     public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10) {
         try {
             IQueryable<DmgCuentas> efQuery = dbContext.DmgCuentas
-                .FromSqlRaw("SELECT DESCRIP_ESP FROM contable.fn_get_ids_catalogo()");
+                .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()");
 
             if (!query.IsNullOrEmpty()) {
                 efQuery = dbContext.DmgCuentas
+                    .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()")
                     .Where(
                         entity =>
-                            EF.Functions.Like(entity.DESCRIP_ESP, $"%{query}%") 
-                            || EF.Functions.Like(entity.DESCRIP_ING, $"%{query}%")
+                            EF.Functions.Like(entity.idCatalogo, $"%{query}%")
+                            || EF.Functions.Like(entity.DESCRIP_ESP, $"%{query}%")
                     );
             }
 
@@ -233,7 +234,7 @@ public class DmgCuentasRepository(
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(entity => new Select2ResultSet {
-                    id = entity.DESCRIP_ESP,
+                    id = entity.idCatalogo,
                     text = entity.DESCRIP_ESP,
                     more = pageNumber * pageSize < count
                 })
