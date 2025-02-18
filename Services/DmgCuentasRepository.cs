@@ -28,7 +28,7 @@ public interface IDmgCuentasRepository
 
     public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10);
 
-    public Task<DmgCuentasResultSet?> GetCofasaCatalogData(string id);
+    public Task<CofasaCatalogoResultSet?> GetCofasaCatalogData(string id);
 }
 
 public class DmgCuentasRepository(
@@ -223,7 +223,7 @@ public class DmgCuentasRepository(
                     .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()")
                     .Where(
                         entity =>
-                            EF.Functions.Like(entity.idCatalogo, $"%{query}%")
+                            EF.Functions.Like(entity.idCatalogo.ToString(), $"%{query}%")
                             || EF.Functions.Like(entity.DESCRIP_ESP, $"%{query}%")
                     );
             }
@@ -234,7 +234,7 @@ public class DmgCuentasRepository(
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(entity => new Select2ResultSet {
-                    id = entity.idCatalogo,
+                    id = entity.idCatalogo.ToString(),
                     text = entity.DESCRIP_ESP,
                     more = pageNumber * pageSize < count
                 })
@@ -247,18 +247,18 @@ public class DmgCuentasRepository(
         }
     }
 
-    public Task<DmgCuentasResultSet?> GetCofasaCatalogData(string id) {
+    public Task<CofasaCatalogoResultSet?> GetCofasaCatalogData(string id) {
         try {
-            var result = dbContext.DmgCuentas
+            var result = dbContext.ConsultarCofasaCatalogoFromFunc
                 .FromSqlRaw("SELECT * FROM contable.fn_get_catalogo({0})", id)
-                .Select(cuenta => DmgCuentasResultSet.EntityToResultSet(cuenta))
+                .Select(cuenta => CofasaCatalogoResultSet.EntityToResultSet(cuenta))
                 .FirstOrDefaultAsync();
             return result;
         }
         catch (Exception e) {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
                 nameof(SecurityRepository), nameof(GetCofasaCatalogData));
-            return Task.FromResult<DmgCuentasResultSet?>(null);
+            return Task.FromResult<CofasaCatalogoResultSet?>(null);
         }
     }
 }

@@ -142,7 +142,7 @@ public class DmgCuentasController(
     [HttpGet]
     public async Task<JsonResult> GetCofasaCatalogoDataById([FromQuery] string id) {
         bool result;
-        DmgCuentasResultSet? cuenta = null;
+        CofasaCatalogoResultSet? cuenta = null;
 
         try {
             cuenta = await dmgCuentasRepository.GetCofasaCatalogData(id);
