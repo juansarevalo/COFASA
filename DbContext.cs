@@ -20,6 +20,7 @@ namespace CoreContable {
             modelBuilder.Entity<ValidateUserOnLoginFromFunctionResult>(e => e.HasNoKey());
             modelBuilder.Entity<ConsultarCentroCuentaFromFunc>(e => e.HasNoKey());
             modelBuilder.Entity<GetCofasaCodCiasFromFunctionResult>(e => e.HasNoKey());
+            modelBuilder.Entity<ConsultarCofasaCatalogoFromFunc>(e => e.HasNoKey());
 
             // Varias llaves primarias
             modelBuilder.Entity<CentroCuenta>().HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO, x.CTA_1, x.CTA_2, x.CTA_3, x.CTA_4, x.CTA_5, x.CTA_6 });
@@ -60,5 +61,7 @@ namespace CoreContable {
         public DbSet<ValidateUserOnLoginFromFunctionResult> ValidateUserOnLoginFromFunctionResult { get; set; }
         public DbSet<ConsultarCentroCuentaFromFunc> ConsultarCentroCuentaFromFunc { get; set; }
         public DbSet<GetCofasaCodCiasFromFunctionResult> GetCofasaCodCiasFromFunctionResult { get; set; }
+
+        public DbSet<ConsultarCofasaCatalogoFromFunc> ConsultarCofasaCatalogoFromFunc { get; set; }
     }
 }
