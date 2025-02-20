@@ -30,27 +30,17 @@ public abstract class CC
     public const string SCHEMA = "CONTABLE";
     // public const string SCHEMA = "dbo";
 
-    public const string AC_MON_MONEDA = "ac_mon_moneda";
     public const string CENTRO_COSTO = "centro_costo";
     public const string CENTRO_CUENTA = "centro_cuenta";
-    public const string COMPANIAS = "COMPANIAS";
-    public const string DET_REPOSITORIO = "det_repositorio";
-    public const string DMG_CIE_CIERRE = "dmg_cie_cierre";
+    public const string COMPANIAS = "companias";
     public const string DMGCUENTAS = "dmgcuentas";
-    public const string DMGDOCTOS = "dmgdoctos";
-    public const string DMGPARAM = "dmgparam";
-    public const string DMGPERIODO = "dmgperiodo";
-    public const string REPOSITORIO = "repositorio";
+    public const string TIPOENTRADACUENTAS = "TipoEntradaCuentas";
     public const string PERMISSION = "Permission";
     public const string ROLE = "Role";
     public const string ROLEPERMISSION = "RolePermission";
     public const string USERAPP = "UserApp";
     public const string USERCIA = "UserCia";
     public const string USERROLE = "UserRole";
-    public const string DMGPOLIZA = "dmgpoliza";
-    public const string DMGDETALLE = "dmgdetalle";
-    public const string DMGNUMERA = "dmgnumera";
-    public const string REPOSITORYIMPORTLOG = "repository_import_log";
 
     public const string RoleAdmin = "admin";
     public const string RoleReports = "reports";

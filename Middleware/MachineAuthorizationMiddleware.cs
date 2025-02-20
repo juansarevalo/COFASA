@@ -17,17 +17,9 @@ public class MachineAuthorizationMiddleware(
         "/roles/index",
 
         "/cias/index",
-        "/params/conta",
-        "/params/period",
-        "/dmgdoctos/index",
-        "/currency/index",
         "/dmgcuentas/index",
         "/centrocosto/index",
-
-        "/repository/index",
-        "/dmgpoliza/index",
-
-        "/reports/index"
+        "/tipoentradacuentas/index"
     ];
 
     public async Task InvokeAsync(HttpContext context)
