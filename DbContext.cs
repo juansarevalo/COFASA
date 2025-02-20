@@ -47,6 +47,7 @@ namespace CoreContable {
         public DbSet<DmgCuentas> DmgCuentas { get; set; }
         public DbSet<CentroCosto> CentroCosto { get; set; }
         public DbSet<CentroCuenta> CentroCuenta { get; set; }
+        public DbSet<TipoEntradaCuentas> TipoEntradaCuentas { get; set; }
 
         // DbSets de vistas
         public DbSet<CentroCuentaView> CentroCuentaView { get; set; }

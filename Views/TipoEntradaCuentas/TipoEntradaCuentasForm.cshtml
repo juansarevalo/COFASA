@@ -1,0 +1,45 @@
+﻿@using CoreContable.Services
+@using CoreContable.Utils
+@inject ISecurityRepository SecurityRepository
+
+<form role="form" id="tipoEntradaCuentasForm" style="margin-left:15px; margin-right:15px;">
+    <div class="col-md-12">
+        <input type="hidden" class="form-control" id="Id" name="Id" jv-required="false" jv-minlength="1" />
+        <input type="hidden" class="form-control" id="CodCia" name="CodCia" value="@SecurityRepository.GetSessionCiaCode()" jv-required="true" jv-minlength="3" jv-maxlength="3" />
+
+        <div class="form-group">
+            <label>Tipo de Entrada</label>
+            <input type="text" class="form-control" id="TipoEntrada" name="TipoEntrada" jv-required="true" jv-minlength="1" jv-maxlength="1" />
+        </div>
+
+        <div class="form-group id="cuentaSelect">
+            <label class="form-label" for="CodContable">Cuenta</label> @* Viene de: DmgCuentas *@
+            <input type="hidden" class="form-control" id="CodContable" name="CodContable" jv-required="true" />
+        </div>
+
+        <div class="form-group">
+            <label for="TipoCuenta" class="form-label">Tipo Cuenta</label>
+            <select class="form-control" id="TipoCuenta" name="TipoCuenta" jv-required="true" jv-minlength="1" jv-maxlength="5">
+                <option value="">Seleccione un valor</option>
+                <option value="CARGO">Cargo</option>
+                <option value="ABONO">Abono</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="FormaCalculo">Forma Cálculo</label>
+            <input type="text" class="form-control" placeholder="" id="FormaCalculo" name="FormaCalculo" jv-required="true" jv-minlength="1" jv-maxlength="30" />
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-12" style="margin-top:20px;">
+                <button class="btn btn-primary btn-md float-right" id="tipoEntradaCuentasFormBtnSave" type="submit">
+                    <i class="fa fa-floppy-o"></i>&nbsp;
+                    <span id="tipoEntradaCuentasFormBtnSaveText">Guardar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

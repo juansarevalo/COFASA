@@ -296,7 +296,11 @@ function setFormData(data) {
     $('#CTA_5P').val(data.CTA_5P);
     $('#CTA_6P').val(data.CTA_6P);
 
-    if (data.ACEP_MOV === 'S') { $('#ACEP_MOV').prop('checked', true) }
+    if (data.ACEP_MOV === 'S') {
+        $('#ACEP_MOV').prop('checked', true)
+    } else {
+        $('#ACEP_MOV').prop('checked', false)
+    }
     if (data.ACEP_PRESUP === 'S') { $('#ACEP_PRESUP').prop('checked', true) }
     if (data.ACEP_PRESUP_COMPRAS === 'S') { $('#ACEP_PRESUP_COMPRAS').prop('checked', true) }
     if (data.Catalogo === 'S') { $('#CATALOGO').prop('checked', true) }

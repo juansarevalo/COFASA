@@ -4,6 +4,7 @@ using CoreContable.Entities.FuntionResult;
 namespace CoreContable.Models.ResultSet;
 
 public class CofasaCatalogoResultSet {
+    public string? codContable { get; set; }
     public string? DESCRIP_ESP { get; set; }
     public string? DESCRIP_ING { get; set; }
 
@@ -17,6 +18,7 @@ public class CofasaCatalogoResultSet {
 
     public static CofasaCatalogoResultSet EntityToResultSet(ConsultarCofasaCatalogoFromFunc entity) {
         return new CofasaCatalogoResultSet {
+            codContable = entity.codContable ?? "",
             DESCRIP_ESP = entity.DESCRIP_ESP ?? "",
             DESCRIP_ING = entity.DESCRIP_ING ?? "",
             ACEP_MOV = entity.ACEP_MOV ?? "",
