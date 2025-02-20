@@ -6,6 +6,8 @@ namespace CoreContable.Entities.FuntionResult;
 
 [Keyless]
 public class ConsultarCofasaCatalogoFromFunc {
+    [MaxLength(15)]
+    public required string codContable { get; set; }
     [MaxLength(70)]
     public required string DESCRIP_ESP { get; set; }
     [MaxLength(70)]

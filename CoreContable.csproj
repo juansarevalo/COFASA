@@ -120,6 +120,11 @@
     <None Include="Views\**\*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Views\TipoEntradaCuentas\Index.cshtml" />
+    <Content Remove="Views\TipoEntradaCuentas\TipoEntradaCuentasForm.cshtml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <AdditionalFiles Include="Views\DmgCuentas\Index.cshtml" />

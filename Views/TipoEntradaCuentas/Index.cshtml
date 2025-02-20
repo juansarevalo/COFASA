@@ -3,7 +3,7 @@
 @inject ISecurityRepository SecurityRepository
 
 @{
-    ViewData["Title"] = "Centro de costos";
+    ViewData["Title"] = "Tipo de entradas - Cuentas";
 }
 
 @section Styles{
@@ -17,7 +17,6 @@
 }
 
 <input type="hidden" id="codCia" name="codCia" value="@SecurityRepository.GetSessionCiaCode()">
-<input type="hidden" id="codCC" name="codCC">  @* ESTO ES PARA EL GRID DE CUENTAS *@
 
 <div class="card">
     <div class="card-body">
@@ -25,7 +24,7 @@
         {
             <div class="row">
                 <div class="col-12">
-                    <button class="btn btn-primary btn-md button-create float-right" id="centroCostoAddBtn" style="margin-bottom:20px;">
+                    <button class="btn btn-primary btn-md button-create float-right" id="tipoEntradaCuentasAddBtn" style="margin-bottom:20px;">
                         <i class="fa fa-plus"></i>
                         Agregar
                     </button>
@@ -33,13 +32,14 @@
             </div>
         }
 
-        <table id="centroCostoDt" class="" style="width:100%!important;">
+        <table id="tipoEntradaCuentasDt" class="" style="width:100%!important;">
             <thead>
             <tr>
                 <th style="width: 5%;">#</th>
-                <th>Código</th>
-                <th>Descripción</th>
-                <th>Acepta datos</th>
+                <th>Tipo Entrada</th>
+                <th>Cod Cuenta</th>
+                <th>Tipo Cuenta</th>
+                <th>Forma Cálculo</th>
                 <th style="width: 10%;">Acciones</th>
             </tr>
             </thead>
@@ -48,32 +48,15 @@
     </div>
 </div>
 
-<textarea id="centroCostoGridButtons" style="display:none;">
+<textarea id="tipoEntradaCuentasGridButtons" style="display:none;">
     <div class="btn-group" data-row="{data}" style="">
-        @if (SecurityRepository.GetSessionUserPermissionList().Contains(CC.THIRD_LEVEL_PERMISSION_CENTROCOSTO_CAN_UPDATE))
-        {
-            <button class='btn btn-warning btn-sm button-edit' data-action="edit" title="Editar">
-                <i class='fa fa-pencil'></i>
-            </button>
-        }
-        @if (SecurityRepository.GetSessionUserPermissionList().Contains(CC.THIRD_LEVEL_PERMISSION_ADMIN_CENTRO_CUENTA))
-        {
-            <button class='btn btn-primary btn-sm button-accounts' data-action="accounts" title="Cuentas">
-                <i class='fa fa-list-ul'></i>
-            </button>
-        }
-        @if (SecurityRepository.GetSessionUserPermissionList().Contains(CC.THIRD_LEVEL_PERMISSION_CENTROCOSTO_CAN_COPY))
-        {
-            <button class='btn btn-default btn-sm button-accounts' data-action="cc-do-copy" title="Crear copia">
-                <i class='fa fa-clipboard'></i>
-            </button>
-        }
+        <button class='btn btn-warning btn-sm button-edit' data-action="edit" title="Editar">
+            <i class='fa fa-pencil'></i>
+        </button>
     </div>
 </textarea>
 
-<textarea id="centroCostoFormBody" style="display:none;"><partial name="CentroCostoForm" /></textarea>
-<textarea id="ccAccountsGridHtml" style="display:none;"><partial name="../CentroCuenta/Index" /></textarea>
-<textarea id="ccCopyHtml" style="display:none;"><partial name="CopyForm" /></textarea>
+<textarea id="tipoEntradaCuentasFormBody" style="display:none;"><partial name="TipoEntradaCuentasForm" /></textarea>
 
 @section Scripts{
     <script src="~/plugins/jquery.dataTables/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -88,11 +71,5 @@
     <script src="~/plugins/jQuery-Mask-Plugin-master/dist/jquery.mask.min.js"></script>
     <script src="~/js/pages/utils/base.grid.js" asp-append-version="true"></script>
     <script src="~/js/pages/utils/accounts.utils.js" asp-append-version="true"></script>
-    <script src="~/js/pages/centrocosto.admin.js" asp-append-version="true"></script>
-    <script src="~/js/pages/centrocosto.admin.accounts.js" asp-append-version="true"></script>
-
-
-    <script src="~/js/pages/contarepo.admin.detrepo.js" asp-append-version="true"></script>
-
-
+    <script src="~/js/pages/tipoentradacuentas.js" asp-append-version="true"></script>
 }

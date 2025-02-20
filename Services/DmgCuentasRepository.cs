@@ -235,7 +235,7 @@ public class DmgCuentasRepository(
                 .Take(pageSize)
                 .Select(entity => new Select2ResultSet {
                     id = entity.idCatalogo.ToString(),
-                    text = entity.DESCRIP_ESP,
+                    text = entity.idCatalogo + " - " + entity.DESCRIP_ESP,
                     more = pageNumber * pageSize < count
                 })
                 .ToListAsync();
