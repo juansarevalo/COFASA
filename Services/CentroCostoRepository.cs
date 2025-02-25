@@ -18,6 +18,10 @@ public interface ICentroCostoRepository {
     Task<bool> SaveOrUpdate (CentroCostoDto data);
 
     Task<bool> DoCopy (string origen, string destination);
+
+    Task<List<Select2ResultSet>> GetForSelect2Father(string codCia, string? query = null, int pageNumber = 1, int pageSize = 10);
+
+    Task<List<CentroCostoResultSet>> GetCentroCostoHijos(string codCia, string codCentroCosto);
 }
 
 public class CentroCostoRepository (
@@ -112,6 +116,7 @@ public class CentroCostoRepository (
 
             command.Parameters.Add (new SqlParameter ("@COD_CIA", SqlDbType.VarChar) { Value = data.COD_CIA == null ? DBNull.Value : data.COD_CIA });
             command.Parameters.Add (new SqlParameter ("@CENTRO_COSTO", SqlDbType.VarChar) { Value = data.CENTRO_COSTO == null ? DBNull.Value : data.CENTRO_COSTO });
+            command.Parameters.Add (new SqlParameter ("@CENTRO_COSTO_PADRE", SqlDbType.VarChar) { Value = data.CENTRO_COSTO_PADRE == null ? DBNull.Value : data.CENTRO_COSTO_PADRE });
             command.Parameters.Add (new SqlParameter ("@DESCRIPCION", SqlDbType.VarChar) { Value = data.DESCRIPCION == null ? DBNull.Value : data.DESCRIPCION });
             command.Parameters.Add (new SqlParameter ("@ACEPTA_DATOS", SqlDbType.VarChar) { Value = data.ACEPTA_DATOS == null ? "N" : data.ACEPTA_DATOS });
             command.Parameters.Add (new SqlParameter ("@USUARIO_MODIFICACION", SqlDbType.VarChar) { Value = data.USUARIO_MODIFICACION == null ? DBNull.Value : data.USUARIO_MODIFICACION });
@@ -153,4 +158,49 @@ public class CentroCostoRepository (
             return false;
         }
     }
+
+    public Task<List<Select2ResultSet>> GetForSelect2Father(string codCia, string? query = null, int pageNumber = 1, int pageSize = 10) {
+        IQueryable<CentroCosto> efQuery = dbContext.CentroCosto
+            .FromSqlRaw("SELECT * FROM CONTABLE.fn_get_centro_costo_padre()")
+            .Where(entity => entity.COD_CIA == codCia); // Filtrar por COD_CIA
+
+        // Si hay una búsqueda por query, agregarlo al filtro
+        if (!query.IsNullOrEmpty()) {
+            efQuery = efQuery
+                .Where(
+                    entity =>
+                        EF.Functions.Like(entity.CENTRO_COSTO, $"%{query}%")
+                        || EF.Functions.Like(entity.DESCRIPCION, $"%{query}%")
+                );
+        }
+
+        var count = efQuery.Count();
+
+        return efQuery
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(entity => new Select2ResultSet {
+                id = entity.CENTRO_COSTO,
+                text = $"{entity.CENTRO_COSTO} - {entity.DESCRIPCION}",
+                more = pageNumber * pageSize < count
+            })
+            .ToListAsync();
+    }
+
+    public Task<List<CentroCostoResultSet>> GetCentroCostoHijos(string codCia, string codCentroCosto) =>
+        dbContext.CentroCosto
+            .FromSqlRaw(
+                "SELECT * FROM CONTABLE.fn_get_centro_costo_hijos({0}, {1})", codCia, codCentroCosto
+            ).Select(entity => new CentroCostoResultSet {
+                COD_CIA = entity.COD_CIA,
+                CENTRO_COSTO = entity.CENTRO_COSTO,
+                DESCRIPCION = entity.DESCRIPCION,
+                ACEPTA_DATOS = entity.ACEPTA_DATOS,
+                FECHA_CREACION = entity.FECHA_CREACION,
+                FECHA_MODIFICACION = entity.FECHA_MODIFICACION,
+                USUARIO_CREACION = entity.USUARIO_CREACION,
+                USUARIO_MODIFICACION = entity.USUARIO_MODIFICACION
+            })
+            .ToListAsync();
+
 }

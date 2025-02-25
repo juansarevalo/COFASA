@@ -8,8 +8,16 @@
         <input type="hidden" class="form-control" id="CodCia" name="CodCia" value="@SecurityRepository.GetSessionCiaCode()" jv-required="true" jv-minlength="3" jv-maxlength="3" />
 
         <div class="form-group">
-            <label>Tipo de Entrada</label>
-            <input type="text" class="form-control" id="TipoEntrada" name="TipoEntrada" jv-required="true" jv-minlength="1" jv-maxlength="1" />
+            <label for="TipoEntrada" class="form-label">Tipo de Entrada</label>
+            <select class="form-control" id="TipoEntrada" name="TipoEntrada" jv-required="true" jv-minlength="1" jv-maxlength="2">
+                <option value="">Seleccione un valor</option>
+                <option value="1">Cambio</option>
+                <option value="2">Cambio de lote</option>
+                <option value="3">Materia prima</option>
+                <option value="4">Producto terminado</option>
+                <option value="5">Reingresos</option>
+                <option value="6">Camio de codigo</option>
+            </select>
         </div>
 
         <div class="form-group id="cuentaSelect">
@@ -26,9 +34,39 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="FormaCalculo">Forma Cálculo</label>
-            <input type="text" class="form-control" placeholder="" id="FormaCalculo" name="FormaCalculo" jv-required="true" jv-minlength="1" jv-maxlength="30" />
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="FormaCalculo">Columna 1</label>
+                <select class="form-control" id="Columna1" jv-required="true" jv-minlength="1" jv-maxlength="2">
+                    <option value="">Seleccione un valor</option>
+                    <option value="cantidad">Cantidad</option>
+                    <option value="manoObra">Mano de Obra</option>
+                    <option value="cargaFab">Carga Fabril</option>
+                    <option value="matEmpaque">Material de Empaque</option>
+                    <option value="matPrima">Materia Prima</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="FormaCalculo">Operación</label>
+                <select class="form-control" id="Operacion" jv-required="true" jv-minlength="1" jv-maxlength="2">
+                    <option value="">Seleccione un valor</option>
+                    <option value="+">Suma</option>
+                    <option value="-">Resta</option>
+                    <option value="*">Multiplicación</option>
+                    <option value="/">División</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="FormaCalculo">Columna 2</label>
+                <select class="form-control" id="Columna2" jv-required="true" jv-minlength="1" jv-maxlength="2">
+                    <option value="">Seleccione un valor</option>
+                    <option value="cantidad">Cantidad</option>
+                    <option value="manoObra">Mano de Obra</option>
+                    <option value="cargaFab">Carga Fabril</option>
+                    <option value="matEmpaque">Material de Empaque</option>
+                    <option value="matPrima">Materia Prima</option>
+                </select>
+            </div>
         </div>
 
 

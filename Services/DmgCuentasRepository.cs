@@ -1,5 +1,6 @@
 using System.Data;
 using CoreContable.Entities;
+using CoreContable.Entities.FuntionResult;
 using CoreContable.Models.Dto;
 using CoreContable.Models.ResultSet;
 using CoreContable.Utils;
@@ -215,15 +216,15 @@ public class DmgCuentasRepository(
 
     public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10) {
         try {
-            IQueryable<DmgCuentas> efQuery = dbContext.DmgCuentas
+            IQueryable<ConsultarCofasaCatalogoFromFunc> efQuery = dbContext.ConsultarCofasaCatalogoFromFunc
                 .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()");
 
             if (!query.IsNullOrEmpty()) {
-                efQuery = dbContext.DmgCuentas
+                efQuery = dbContext.ConsultarCofasaCatalogoFromFunc
                     .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()")
                     .Where(
                         entity =>
-                            EF.Functions.Like(entity.idCatalogo.ToString(), $"%{query}%")
+                            EF.Functions.Like(entity.codContable, $"%{query}%")
                             || EF.Functions.Like(entity.DESCRIP_ESP, $"%{query}%")
                     );
             }
@@ -235,7 +236,7 @@ public class DmgCuentasRepository(
                 .Take(pageSize)
                 .Select(entity => new Select2ResultSet {
                     id = entity.idCatalogo.ToString(),
-                    text = entity.idCatalogo + " - " + entity.DESCRIP_ESP,
+                    text = entity.codContable + " - " + entity.DESCRIP_ESP,
                     more = pageNumber * pageSize < count
                 })
                 .ToListAsync();

@@ -1,4 +1,4 @@
-@using CoreContable.Services
+﻿@using CoreContable.Services
 @using CoreContable.Utils
 @inject ISecurityRepository SecurityRepository
 
@@ -7,13 +7,18 @@
         <input type="hidden" class="form-control" id="isUpdating" name="isUpdating" jv-required="false" jv-minlength="1" />
         <input type="hidden" class="form-control" id="COD_CIA" name="COD_CIA" value="@SecurityRepository.GetSessionCiaCode()" jv-required="true" jv-minlength="3" jv-maxlength="3" />
 
-        <div class="form-group">
-            <label>C&oacute;digo del centro de costo</label>
-            <input type="text" class="form-control" id="CENTRO_COSTO" name="CENTRO_COSTO" placeholder="00-000-00" jv-required="true" jv-minlength="9" jv-maxlength="9" />
+        <div class="d-none">
+            <label>Código del centro de costo</label>
+            <input type="text" class="form-control" id="CENTRO_COSTO" name="CENTRO_COSTO" placeholder="00-000-00" jv-minlength="9" jv-maxlength="9" />
+        </div>
+
+        <div class="form-group" id="CENTRO_COSTO_PADRE_DIV">
+            <label>Centro de Costo Padre</label>
+            <input type="hidden" class="form-control" id="CENTRO_COSTO_PADRE" name="CENTRO_COSTO_PADRE" />
         </div>
 
         <div class="form-group">
-            <label>Descripci&oacute;n</label>
+            <label>Descripción</label>
             <input type="text" class="form-control" id="DESCRIPCION" name="DESCRIPCION" jv-required="true" jv-minlength="2" jv-maxlength="200" />
         </div>
 
