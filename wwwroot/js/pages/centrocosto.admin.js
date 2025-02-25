@@ -82,6 +82,13 @@ function overrideShowForm(codCia, codCentroCosto) {
             $(`#${initValues.formAddButtonTextId}`).text('Editar');
 
             overrideLoadOne(codCia, codCentroCosto);
+
+            $('#CENTRO_COSTO_PADRE_DIV').hide();
+        } else {
+            initSelect2Paginated(
+                'CENTRO_COSTO_PADRE',
+                '/CentroCosto/GetToSelect2Father',
+                'Centro de Costo Padre');
         }
     });
 }

@@ -3,6 +3,7 @@ using CoreContable.Entities;
 using CoreContable.Models;
 using CoreContable.Models.ResultSet;
 using CoreContable.Utils;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,8 @@ public interface ICiasRepository
     Task<List<CiaResultSet>> GetCias();
 
     Task<Companias?> GetCiaById(string cod);
+
+    public Task<Companias?> GetCoreCia(string cod, string nom_comercial);
 
     Task<List<CiaResultSet>> GetUserCias(int userId);
 
@@ -52,6 +55,11 @@ public class CiasRepository(
     public Task<Companias?> GetCiaById(string cod) =>
         dbContext.Companias
             .Where(cia => cia.CodCia == cod)
+            .FirstOrDefaultAsync();
+
+    public Task<Companias?> GetCoreCia(string cod, string nom_comercial) =>
+        dbContext.Companias
+            .FromSqlRaw("SELECT * FROM contable.fn_get_core_compania({0}, {1})", cod, nom_comercial)
             .FirstOrDefaultAsync();
 
     public Task<List<CiaResultSet>> GetUserCias(int userId) =>

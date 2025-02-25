@@ -34,6 +34,7 @@ public abstract class CC
     public const string CENTRO_CUENTA = "centro_cuenta";
     public const string COMPANIAS = "companias";
     public const string DMGCUENTAS = "dmgcuentas";
+    public const string DMGDOCTOS = "dmgdoctos";
     public const string TIPOENTRADACUENTAS = "TipoEntradaCuentas";
     public const string PERMISSION = "Permission";
     public const string ROLE = "Role";
