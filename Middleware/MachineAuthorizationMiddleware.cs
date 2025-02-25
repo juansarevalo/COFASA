@@ -18,6 +18,7 @@ public class MachineAuthorizationMiddleware(
 
         "/cias/index",
         "/dmgcuentas/index",
+        "/dmgdoctos/index",
         "/centrocosto/index",
         "/tipoentradacuentas/index"
     ];

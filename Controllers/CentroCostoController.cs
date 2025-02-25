@@ -57,20 +57,22 @@ public class CentroCostoController (
                 data.FECHA_CREACION = DateTime.Now;
                 data.USUARIO_CREACION = securityRepository.GetSessionUserName ( );
                 isUpdating = false;
-
-                var isExists = await centroCostoRepository.GetOne(data.COD_CIA, data.CENTRO_COSTO);
-
-                if (isExists != null) {
-                    return Json(new {
-                        success = false,
-                        message = "Ya existe un centro de costo con este código"
-                    });
-                }
             }
             else {
                 data.FECHA_MODIFICACION = DateTime.Now;
                 data.USUARIO_MODIFICACION = securityRepository.GetSessionUserName ( );
                 isUpdating = true;
+
+                if(data.ACEPTA_DATOS == "S") {
+                    var isExistsHijos = await centroCostoRepository.GetCentroCostoHijos(data.COD_CIA, data.CENTRO_COSTO);
+
+                    if (isExistsHijos.Count != 0) {
+                        return Json(new {
+                            success = false,
+                            message = "Este centro de costo tiene hijos"
+                        });
+                    }
+                }
             }
 
             result = await centroCostoRepository.SaveOrUpdate (data);
@@ -159,4 +161,25 @@ public class CentroCostoController (
             message
         });
     }
+
+    [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_CENTROCOSTO_CAN_ADD)]
+    [HttpGet]
+    public async Task<JsonResult> GetToSelect2Father([FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
+        var ccostos = new List<Select2ResultSet>();
+        var currentCia = securityRepository.GetSessionCiaCode();
+
+        try {
+            ccostos = await centroCostoRepository.GetForSelect2Father(currentCia, q, page, pageSize);
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(CentroCostoController), nameof(GetToSelect2));
+        }
+
+        return Json(new {
+            results = ccostos,
+            more = ccostos.Count > 0 ? ccostos.Last().more : false
+        });
+    }
+
 }

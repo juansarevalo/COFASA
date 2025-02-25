@@ -58,30 +58,58 @@ function overrideInitDt() {
 }
 
 function overrideShowForm(id) {
-    showForm(id, function (isEditing) {
-        overrideFormValidation();
-        $('#CodCia').val($('#codCia').val());
+    const isEditing = !(typeof (id) === 'undefined' || id === 0);
+    var title = '';
 
-        initSelect2Paginated(
-            'CodContable',
-            '/DmgCuentas/GetToSelect2CofasaCatalogo',
-            'Cuentas...'
-        );
+    if (isEditing) {
+        title = 'Editar registro';
+    } else {
+        title = 'Agregar registro';
+    }
 
-        if (isEditing) {
-            $('#Id').val(id);
-            $(`#${initValues.formAddButtonTextId}`).text('Editar');
-
-            overrideLoadOne(id);
-        }
+    dialog = bootbox.dialog({
+        title: title,
+        message: $('#tipoEntradaCuentasFormBody').val(),
+        className: 'modalLarge',
+        onEscape: true
     });
+
+    $('#CodCia').val($('#codCia').val());
+
+    initSelect2Paginated(
+        'CodContable',
+        '/DmgCuentas/GetToSelect2CofasaCatalogo',
+        'Cuentas...'
+    );
+
+    if (isEditing) {
+        $('#Id').val(id);
+        $(`#${initValues.formAddButtonTextId}`).text('Editar');
+
+        overrideLoadOne(id);
+    }
+
+    overrideFormValidation();
 }
 
 function overrideFormValidation() {
     initFormValidation({
         showErrorsCb: function (errorMap, errorList, validator) { validator.defaultShowErrors(); },
-        submitHandlerCb: function (form, event) { doSave({}); }
+        submitHandlerCb: function (form, event) { doSaveTipoEntCta({}); }
     });
+}
+
+function doSaveTipoEntCta({ success, error }) {
+    const columna1 = $('#Columna1').val();
+    const operacion = $('#Operacion').val();
+    const columna2 = $('#Columna2').val();
+
+    const formaCalculo = `${columna1} ${operacion} ${columna2}`;
+
+    let formData = $(`#${initValues.formID}`).serialize();
+
+    formData = formData + `&formaCalculo=${encodeURIComponent(formaCalculo)}`;
+    completeDoSave({ success, error, formData });
 }
 
 function overrideLoadOne(id) {

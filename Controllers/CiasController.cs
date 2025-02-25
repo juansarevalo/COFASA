@@ -45,6 +45,15 @@ namespace CoreContable.Controllers {
         public async Task<JsonResult> DoSaveCia([FromForm] CiaDto data) {
             bool result;
 
+            var isExists = await ciasRepository.GetCoreCia(data.COD_CIA, data.NOM_COMERCIAL);
+
+            if (isExists != null) {
+                return Json(new {
+                    success = false,
+                    message = "Ya existe esta compañia en el core contable"
+                });
+            }
+
             try {
                 data.UsuarioCreacion = securityRepository.GetSessionUserName();
                 result = await ciasRepository.CallSaveCia(cia: data);
