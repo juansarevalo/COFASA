@@ -4,15 +4,13 @@ namespace CoreContable.Models.ResultSet;
 
 public class DmgDoctosResultSet
 {
-    public DmgDoctosResultSet(DmgDoctos entity)
+    public DmgDoctosResultSet(TipoPartidaC entity)
     {
-        COD_CIA = entity.COD_CIA;
-        TIPO_DOCTO = entity.TIPO_DOCTO;
-        TIPO_DOCTO_HOMOLOGAR = entity.TIPO_DOCTO_HOMOLOGAR;
-        CONTADOR_POLIZA = entity.CONTADOR_POLIZA;
-        DESCRIP_TIPO = entity.DESCRIP_TIPO;
-        PROCESO = entity.PROCESO;
-        POLIZA_MANUAL = entity.POLIZA_MANUAL;
+        IdTipoPartida = entity.IdTipoPartida;
+        CodCia = entity.CodCia;
+        TipoPartida = entity.TipoPartida;
+        TipoHomologar = entity.TipoHomologar;
+        Nombre = entity.Nombre;
         UsuarioCreacion = entity.UsuarioCreacion;
         FechaCreacion = entity.FechaCreacion;
         UsuarioModificacion = entity.UsuarioModificacion;
@@ -23,13 +21,11 @@ public class DmgDoctosResultSet
     {
     }
 
-    public string? COD_CIA { get; set; }
-    public string? TIPO_DOCTO { get; set; }
-    public string? TIPO_DOCTO_HOMOLOGAR { get; set; }
-    public int? CONTADOR_POLIZA { get; set; }
-    public string? DESCRIP_TIPO { get; set; }
-    public string? PROCESO { get; set; }
-    public string? POLIZA_MANUAL { get; set; }
+    public int? IdTipoPartida { get; set; }
+    public string? CodCia { get; set; }
+    public string? TipoPartida { get; set; }
+    public string? TipoHomologar { get; set; }
+    public string? Nombre { get; set; }
     public string? UsuarioCreacion { get; set; }
     public DateTime? FechaCreacion { get; set; }
     public string? UsuarioModificacion { get; set; }

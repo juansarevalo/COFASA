@@ -2,7 +2,7 @@
 @inject ISecurityRepository SecurityRepository
 
 @{
-    ViewData["Title"] = "Tipos asientos contables";
+    ViewData["Title"] = "Tipos Partidas";
 }
 
 @section Styles{
@@ -37,11 +37,8 @@
                 <th style="width: 5%;">#</th>
                 <th>Compañía</th>
                 <th>Código</th>
-                <th>Código Homologar</th>
-                @*<th>Contador p&oacute;liza</th>*@                
+                <th>Código Homologar</th>              
                 <th>Descripción</th>
-                @*<th>Proceso</th> *@
-                @*<th>Grabaci&oacute;n de p&oacute;liza</th> *@
                 <th style="width: 10%;">Acciones</th>
             </tr>
             </thead>
@@ -72,7 +69,7 @@
     }
 </textarea>
 
-<textarea id="dmgDoctosFormBody" style="display:none;"><partial name="DoctosForm" /></textarea>
+<textarea id="dmgDoctosFormBody" style="display:none;"><partial name="TipoPartidaForm" /></textarea>
 
 @section Scripts{
     <script src="~/plugins/jquery.dataTables/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -85,5 +82,5 @@
     <script src="~/plugins/JSON-js/json2.js"></script>
     <script src="~/plugins/jquery-json/jquery.json.min.js"></script>
     <script src="~/js/pages/utils/base.grid.js" asp-append-version="true"></script>
-    <script src="~/js/pages/dmgdoctos.admin.js" asp-append-version="true"></script>
+    <script src="~/js/pages/tipopartida.admin.js" asp-append-version="true"></script>
 }

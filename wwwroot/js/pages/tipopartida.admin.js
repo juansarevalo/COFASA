@@ -8,7 +8,7 @@ overrideIds({
     addButtonId: 'addDmgDoctos',
     gridButtonsId: 'dmgDoctosGridButtons'
 });
-API.saveOneURL = '/DmgDoctos/SaveOrUpdate';
+API.saveOneURL = '/TipoPartida/SaveOrUpdate';
 
 $(document).ready(function () {
     prepareDmgDoctosSelect();
@@ -45,30 +45,16 @@ function overrideInitDt() {
         function (table) {
             dtTable = table.DataTable({
                 'ajax': {
-                    'url': `/DmgDoctos/GetDmgDoctos?ciaCod=${$('#codCia').val()}`,
+                    'url': `/TipoPartida/GetDmgDoctos?ciaCod=${$('#codCia').val()}`,
                     'type': 'GET',
                     'datatype': 'JSON',
                 },
                 'columns': [
-                    { 'data': 'COD_CIA'},
-                    { 'data': 'COD_CIA'},
-                    { 'data': 'TIPO_DOCTO' },
-                    { 'data': 'TIPO_DOCTO_HOMOLOGAR' },
-                    /*{'data': 'CONTADOR_POLIZA'},*/
-                    {'data': 'DESCRIP_TIPO'},
-                    /*{'data': 'PROCESO'},*/
-                    //{
-                    //    'data': 'POLIZA_MANUAL',
-                    //    sortable: false, searchable: false,
-                    //    render: function (data, type, row, meta) {
-                    //        return dmgDoctosGridSelect
-                    //            .replaceAll('{codCia}', `${row.COD_CIA}_${meta.row}`)
-                    //            .replaceAll('{data}', Base64.encode($.toJSON(row)))
-                    //            .replaceAll('{0}', row.POLIZA_MANUAL === '' || row.POLIZA_MANUAL === null ? '' : 'selected')
-                    //            .replaceAll('{1}', row.POLIZA_MANUAL === 'M' ? 'selected' : '')
-                    //            .replaceAll('{2}', row.POLIZA_MANUAL === 'A' ? 'selected' : '');
-                    //    }
-                    //},
+                    { 'data': 'IdTipoPartida'},
+                    { 'data': 'CodCia'},
+                    { 'data': 'TipoPartida' },
+                    { 'data': 'TipoHomologar' },
+                    { 'data': 'Nombre' },
                     {
                         sortable: false, searchable: false,
                         render: function (data, type, row) {
@@ -81,7 +67,7 @@ function overrideInitDt() {
         function () {
             bindDmgDoctosSelect();
             bindButtons(function (action, data) {
-                if (action === 'edit') { overrideShowForm(data.TIPO_DOCTO); }
+                if (action === 'edit') { console.log(data); overrideShowForm(data.IdTipoPartida); }
             });
         }
     );
@@ -89,15 +75,15 @@ function overrideInitDt() {
 
 /**
  * 
- * @param id TIPO_DOCTO.
+ * @param id TipoPartida.
  */
 function overrideShowForm(id) {
     showForm(id, function (isEditing) {
         startDmgDoctosValidation();
-        $('#COD_CIA').val($('#codCia').val());
+        $('#CodCia').val($('#codCia').val());
 
         if (isEditing) {
-            $('#isUpdating').val(id);
+            $('#IdTipoPartida').val(id);
             $('#btnSaveDmgDoctosText').text('Editar');
             overrideLoadOne(id);
         }
@@ -105,15 +91,14 @@ function overrideShowForm(id) {
 }
 
 function callDmgDoctosFromSelect(data, newStatus) {
-    const formData = `isUpdating=1&COD_CIA=${data.COD_CIA}&TIPO_DOCTO=${data.TIPO_DOCTO}
-        &CONTADOR_POLIZA=${data.CONTADOR_POLIZA}&DESCRIP_TIPO=${data.DESCRIP_TIPO}&PROCESO=${data.PROCESO}
-        &POLIZA_MANUAL=${newStatus}`;
+    const formData = `isUpdating=1&COD_CIA=${data.COD_CIA}&TipoPartida=${data.TipoPartida}
+        &Nombre=${data.Nombre}`;
 
     POST({
-        url: '/DmgDoctos/SaveOrUpdate',
+        url: '/TipoPartida/SaveOrUpdate',
         data: formData,
         success: function (data) {
-            // Mostrar el mensaje (éxito o error) devuelto por el servidor
+            // Mostrar el mensaje (Ã‰xito o error) devuelto por el servidor
             showToast(data.success, data.message);
             // Recargar tabla si fue exitoso
             if (data.success) reloadTable();
@@ -129,13 +114,10 @@ function startDmgDoctosValidation() {
     $(`#${initValues.formID}`).validate({
         rules: {
             isUpdating: {required: false, minlength: 1, maxlength: 2},
-            COD_CIA: {required: true, minlength: 3, maxlength: 3},
-            TIPO_DOCTO: { required: true, minlength: 2, maxlength: 2 },
-            TIPO_DOCTO_HOMOLOGAR: { required: true, minlength: 2, maxlength: 2 },
-            //CONTADOR_POLIZA: {required: true, digits: true},
-            DESCRIP_TIPO: {required: true, minlength: 4, maxlength: 40},
-            PROCESO: {required: true, minlength: 1, maxlength: 1},
-            POLIZA_MANUAL: {required: true, minlength: 1, maxlength: 1},
+            CodCia: {required: true, minlength: 3, maxlength: 3},
+            TipoPartida: { required: true, minlength: 2, maxlength: 3 },
+            TipoHomologar: { required: true, minlength: 2, maxlength: 2 },
+            Nombre: {required: true, minlength: 4, maxlength: 40},
         },
         submitHandler: function (form, event) {
             doSave({});
@@ -143,8 +125,8 @@ function startDmgDoctosValidation() {
     });
 }
 
-function overrideLoadOne(TIPO_DOCTO) {
-    API.getOneURL = `/DmgDoctos/GetOneDmgDocto?ciaCod=${$('#codCia').val()}&doctoType=${TIPO_DOCTO}`;
+function overrideLoadOne(IdTipoPartida) {
+    API.getOneURL = `/TipoPartida/GetOneDmgDocto?ciaCod=${$('#codCia').val()}&IdTipoPartida=${IdTipoPartida}`;
 
     loadOne({
         success: function (data) {
@@ -154,10 +136,11 @@ function overrideLoadOne(TIPO_DOCTO) {
 }
 
 function setDataToDmgDoctoForm(data) {
-    $('#TIPO_DOCTO').val(data.TIPO_DOCTO);
-    $('#TIPO_DOCTO_HOMOLOGAR').val(data.TIPO_DOCTO_HOMOLOGAR);
+    $('#IdTipoPartida').val(data.IdTipoPartida);
+    $('#TipoPartida').val(data.TipoPartida);
+    $('#TipoHomologar').val(data.TipoHomologar);
     $('#CONTADOR_POLIZA').val(data.CONTADOR_POLIZA);
-    $('#DESCRIP_TIPO').val(data.DESCRIP_TIPO);
+    $('#Nombre').val(data.Nombre);
     $('#PROCESO').val(data.PROCESO);
     $('#POLIZA_MANUAL').val(data.POLIZA_MANUAL);
 }

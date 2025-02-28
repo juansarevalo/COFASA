@@ -10,13 +10,13 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CoreContable.Services;
 
-public interface IDmgDoctosRepository
+public interface ITipoPartidaRepository
 {
     Task<List<DmgDoctosResultSet>> GetAllBy(string codCia, string query);
 
     Task<List<DmgDoctosResultSet>> GetDmgDoctosByCia(string codCia);
 
-    Task<DmgDoctosResultSet?> GetOneDmgDoctoByCia(string codCia, string doctoType);
+    Task<DmgDoctosResultSet?> GetOneDmgDoctoByCia(string codCia, int IdTipoPartida);
 
     Task<bool> SaveOrUpdateDmgDocto(DmgDoctosDto data);
     
@@ -24,10 +24,10 @@ public interface IDmgDoctosRepository
         string codCia, string? query = null, int pageNumber = 1, int pageSize = 10);
 }
 
-public class DmgDoctosRepository(
+public class TipoPartidaRepository(
     DbContext dbContext,
-    ILogger<DmgDoctosRepository> logger
-) : IDmgDoctosRepository
+    ILogger<TipoPartidaRepository> logger
+) : ITipoPartidaRepository
 {
     public Task<List<DmgDoctosResultSet>> GetAllBy(string codCia, string query)
     {
@@ -35,16 +35,14 @@ public class DmgDoctosRepository(
         {
             if (query.IsNullOrEmpty())
             {
-                return dbContext.DmgDoctos
-                    .Where(entity => entity.COD_CIA == codCia)
+                return dbContext.TipoPartida
+                    .Where(entity => entity.CodCia == codCia)
                     .Select(entity => new DmgDoctosResultSet
                     {
-                        COD_CIA = entity.COD_CIA,
-                        TIPO_DOCTO = entity.TIPO_DOCTO,
-                        CONTADOR_POLIZA = entity.CONTADOR_POLIZA,
-                        DESCRIP_TIPO = entity.DESCRIP_TIPO,
-                        PROCESO = entity.PROCESO,
-                        POLIZA_MANUAL = entity.POLIZA_MANUAL,
+                        IdTipoPartida = entity.IdTipoPartida,
+                        CodCia = entity.CodCia,
+                        TipoPartida = entity.TipoPartida,
+                        Nombre = entity.Nombre,
                         UsuarioCreacion = entity.UsuarioCreacion,
                         FechaCreacion = entity.FechaCreacion,
                         UsuarioModificacion = entity.UsuarioModificacion,
@@ -53,17 +51,14 @@ public class DmgDoctosRepository(
                     .ToListAsync();
             }
 
-            return dbContext.DmgDoctos
-                .Where(entity => entity.COD_CIA == codCia)
-                .Where(entity => EF.Functions.Like(entity.DESCRIP_TIPO, $"%{query}%"))
+            return dbContext.TipoPartida
+                .Where(entity => entity.CodCia == codCia)
+                .Where(entity => EF.Functions.Like(entity.Nombre, $"%{query}%"))
                 .Select(entity => new DmgDoctosResultSet
                 {
-                    COD_CIA = entity.COD_CIA,
-                    TIPO_DOCTO = entity.TIPO_DOCTO,
-                    CONTADOR_POLIZA = entity.CONTADOR_POLIZA,
-                    DESCRIP_TIPO = entity.DESCRIP_TIPO,
-                    PROCESO = entity.PROCESO,
-                    POLIZA_MANUAL = entity.POLIZA_MANUAL,
+                    CodCia = entity.CodCia,
+                    TipoPartida = entity.TipoPartida,
+                    Nombre = entity.Nombre,
                     UsuarioCreacion = entity.UsuarioCreacion,
                     FechaCreacion = entity.FechaCreacion,
                     UsuarioModificacion = entity.UsuarioModificacion,
@@ -74,7 +69,7 @@ public class DmgDoctosRepository(
         catch (Exception e)
         {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosRepository), nameof(GetAllBy));
+                nameof(TipoPartidaRepository), nameof(GetAllBy));
             return Task.FromResult(new List<DmgDoctosResultSet>());
         }
     }
@@ -83,17 +78,15 @@ public class DmgDoctosRepository(
     {
         try
         {
-            return dbContext.DmgDoctos
+            return dbContext.TipoPartida
                 .FromSqlRaw("SELECT * FROM CONTABLE.ConsultarDocumentos({0}, {1})", codCia, DBNull.Value)
                 .Select(entity => new DmgDoctosResultSet()
                 {
-                    COD_CIA = entity.COD_CIA,
-                    TIPO_DOCTO = entity.TIPO_DOCTO,
-                    TIPO_DOCTO_HOMOLOGAR = entity.TIPO_DOCTO_HOMOLOGAR,
-                    CONTADOR_POLIZA = entity.CONTADOR_POLIZA,
-                    DESCRIP_TIPO = entity.DESCRIP_TIPO,
-                    PROCESO = entity.PROCESO,
-                    POLIZA_MANUAL = entity.POLIZA_MANUAL,
+                    IdTipoPartida = entity.IdTipoPartida,
+                    CodCia = entity.CodCia,
+                    TipoPartida = entity.TipoPartida,
+                    TipoHomologar = entity.TipoHomologar,
+                    Nombre = entity.Nombre,
                     UsuarioCreacion = entity.UsuarioCreacion,
                     FechaCreacion = entity.FechaCreacion,
                     UsuarioModificacion = entity.UsuarioModificacion,
@@ -104,26 +97,24 @@ public class DmgDoctosRepository(
         catch (Exception e)
         {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosRepository), nameof(GetDmgDoctosByCia));
+                nameof(TipoPartidaRepository), nameof(GetDmgDoctosByCia));
             return Task.FromResult(new List<DmgDoctosResultSet>());
         }
     }
 
-    public Task<DmgDoctosResultSet?> GetOneDmgDoctoByCia(string codCia, string doctoType)
+    public Task<DmgDoctosResultSet?> GetOneDmgDoctoByCia(string codCia, int IdTipoPartida)
     {
         try
         {
-            return dbContext.DmgDoctos
-                .FromSqlRaw("SELECT * FROM CONTABLE.ConsultarDocumentos({0}, {1})", codCia, doctoType)
+            return dbContext.TipoPartida
+                .FromSqlRaw("SELECT * FROM CONTABLE.ConsultarDocumentos({0}, {1})", codCia, IdTipoPartida)
                 .Select(entity => new DmgDoctosResultSet()
                 {
-                    COD_CIA = entity.COD_CIA,
-                    TIPO_DOCTO = entity.TIPO_DOCTO,
-                    TIPO_DOCTO_HOMOLOGAR = entity.TIPO_DOCTO_HOMOLOGAR,
-                    CONTADOR_POLIZA = entity.CONTADOR_POLIZA,
-                    DESCRIP_TIPO = entity.DESCRIP_TIPO,
-                    PROCESO = entity.PROCESO,
-                    POLIZA_MANUAL = entity.POLIZA_MANUAL,
+                    IdTipoPartida = entity.IdTipoPartida,
+                    CodCia = entity.CodCia,
+                    TipoPartida = entity.TipoPartida,
+                    TipoHomologar = entity.TipoHomologar,
+                    Nombre = entity.Nombre,
                     UsuarioCreacion = entity.UsuarioCreacion,
                     FechaCreacion = entity.FechaCreacion,
                     UsuarioModificacion = entity.UsuarioModificacion,
@@ -134,7 +125,7 @@ public class DmgDoctosRepository(
         catch (Exception e)
         {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosRepository), nameof(GetOneDmgDoctoByCia));
+                nameof(TipoPartidaRepository), nameof(GetOneDmgDoctoByCia));
             return Task.FromResult<DmgDoctosResultSet?>(null);
         }
     }
@@ -160,7 +151,7 @@ public class DmgDoctosRepository(
         {
             if (command.Connection?.State == ConnectionState.Open)  await dbContext.Database.CloseConnectionAsync();
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosRepository), nameof(SaveOrUpdateDmgDocto));
+                nameof(TipoPartidaRepository), nameof(SaveOrUpdateDmgDocto));
             return false;
         }
     }
@@ -169,16 +160,16 @@ public class DmgDoctosRepository(
     {
         try
         {
-            IQueryable<DmgDoctos> efQuery = dbContext.DmgDoctos
-                .Where(entity => entity.COD_CIA == codCia);
+            IQueryable<TipoPartidaC> efQuery = dbContext.TipoPartida
+                .Where(entity => entity.CodCia == codCia);
 
             if (!query.IsNullOrEmpty())
             {
-                efQuery = dbContext.DmgDoctos
+                efQuery = dbContext.TipoPartida
                     .Where(
                         entity => 
-                            EF.Functions.Like(entity.TIPO_DOCTO, $"%{query}%")
-                            || EF.Functions.Like(entity.DESCRIP_TIPO, $"%{query}%")
+                            EF.Functions.Like(entity.TipoPartida, $"%{query}%")
+                            || EF.Functions.Like(entity.Nombre, $"%{query}%")
                     );
             }
 
@@ -189,8 +180,8 @@ public class DmgDoctosRepository(
                 .Take(pageSize)
                 .Select(entity => new Select2ResultSet
                 {
-                    id = entity.TIPO_DOCTO,
-                    text = entity.DESCRIP_TIPO,
+                    id = entity.IdTipoPartida.ToString(),
+                    text = entity.TipoPartida + " - " + entity.Nombre,
                     more = pageNumber * pageSize < count
                 })
                 .ToListAsync();
@@ -198,20 +189,18 @@ public class DmgDoctosRepository(
         catch (Exception e)
         {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosRepository), nameof(GetForSelect2));
+                nameof(TipoPartidaRepository), nameof(GetForSelect2));
             return Task.FromResult(new List<Select2ResultSet>());
         }
     }
 
     private DbCommand AddParamsForSaveOrUpdate(DbCommand command, DmgDoctosDto data)
     {
-        command.Parameters.Add(new SqlParameter("@COD_CIA", SqlDbType.VarChar) { Value = data.COD_CIA==null ? DBNull.Value : data.COD_CIA });
-        command.Parameters.Add(new SqlParameter("@TIPO_DOCTO", SqlDbType.VarChar) { Value = data.TIPO_DOCTO==null ? DBNull.Value : data.TIPO_DOCTO });
-        command.Parameters.Add(new SqlParameter("@TIPO_DOCTO_HOMOLOGAR", SqlDbType.VarChar) { Value = data.TIPO_DOCTO_HOMOLOGAR == null ? DBNull.Value : data.TIPO_DOCTO_HOMOLOGAR });
-        command.Parameters.Add(new SqlParameter("@CONTADOR_POLIZA", SqlDbType.Int) { Value = data.CONTADOR_POLIZA==null ? DBNull.Value : data.CONTADOR_POLIZA });
-        command.Parameters.Add(new SqlParameter("@DESCRIP_TIPO", SqlDbType.VarChar) { Value = data.DESCRIP_TIPO==null ? DBNull.Value : data.DESCRIP_TIPO });
-        command.Parameters.Add(new SqlParameter("@PROCESO", SqlDbType.VarChar) { Value = data.PROCESO==null ? DBNull.Value : data.PROCESO });
-        command.Parameters.Add(new SqlParameter("@POLIZA_MANUAL", SqlDbType.VarChar) { Value = data.POLIZA_MANUAL==null ? DBNull.Value : data.POLIZA_MANUAL });
+        command.Parameters.Add(new SqlParameter("@IdTipoPartida", SqlDbType.VarChar) { Value = data.IdTipoPartida == null ? DBNull.Value : data.IdTipoPartida });
+        command.Parameters.Add(new SqlParameter("@CodCia", SqlDbType.VarChar) { Value = data.CodCia==null ? DBNull.Value : data.CodCia });
+        command.Parameters.Add(new SqlParameter("@TipoPartida", SqlDbType.VarChar) { Value = data.TipoPartida==null ? DBNull.Value : data.TipoPartida });
+        command.Parameters.Add(new SqlParameter("@TipoHomologar", SqlDbType.VarChar) { Value = data.TipoHomologar == null ? DBNull.Value : data.TipoHomologar });
+        command.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.VarChar) { Value = data.Nombre==null ? DBNull.Value : data.Nombre });
         command.Parameters.Add(new SqlParameter("@UsuarioCreacion", SqlDbType.VarChar) { Value = data.UsuarioCreacion==null ? DBNull.Value : data.UsuarioCreacion });
         command.Parameters.Add(new SqlParameter("@FechaCreacion", SqlDbType.DateTime) { Value = data.FechaCreacion==null ? DBNull.Value : data.FechaCreacion });
         command.Parameters.Add(new SqlParameter("@UsuarioModificacion", SqlDbType.VarChar) { Value = data.UsuarioModificacion==null ? DBNull.Value : data.UsuarioModificacion });

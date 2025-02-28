@@ -9,10 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CoreContable.Controllers;
 
-public class DmgDoctosController(
-    IDmgDoctosRepository dmgDoctosRepository,
+public class TipoPartidaController(
+    ITipoPartidaRepository dmgDoctosRepository,
     ISecurityRepository securityRepository,
-    ILogger<DmgDoctosController> logger
+    ILogger<TipoPartidaController> logger
 ) : Controller
 {
     [IsAuthorized(alias: CC.SECOND_LEVEL_PERMISSION_ADMIN_DMGDOCTOS)]
@@ -35,7 +35,7 @@ public class DmgDoctosController(
         {
             data = null;
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosController), nameof(GetDmgDoctos));
+                nameof(TipoPartidaController), nameof(GetDmgDoctos));
         }
 
         return Json(new
@@ -54,10 +54,10 @@ public class DmgDoctosController(
         var isUpdating = false;
 
         try {
-            // Validar si el TIPO_DOCTO ya existe en la base de datos
-            var existingDocto = await dmgDoctosRepository.GetOneDmgDoctoByCia (data.COD_CIA, data.TIPO_DOCTO);
+            // Validar si el TipoPartida ya existe en la base de datos
+            var existingDocto = await dmgDoctosRepository.GetOneDmgDoctoByCia (data.CodCia, data.IdTipoPartida);
 
-            if (existingDocto != null && data.isUpdating.IsNullOrEmpty ( )) {
+            if (existingDocto != null && data.IdTipoPartida == 0) {
                 // Devolver un mensaje de error si ya existe y no es una actualización
                 return Json (new {
                     success = false,
@@ -65,7 +65,7 @@ public class DmgDoctosController(
                 });
             }
 
-            if (data.isUpdating.IsNullOrEmpty ( )) {
+            if (data.IdTipoPartida == 0) {
                 data.FechaCreacion = DateTime.Now;
                 data.UsuarioCreacion = securityRepository.GetSessionUserName ( );
                 isUpdating = false;
@@ -81,7 +81,7 @@ public class DmgDoctosController(
         catch (Exception e) {
             result = false;
             logger.LogError (e, "Ocurrió un error en {Class}.{Method}",
-                nameof (DmgDoctosController), nameof (SaveOrUpdate));
+                nameof (TipoPartidaController), nameof (SaveOrUpdate));
         }
 
         var message = isUpdating ? "Tipo de partida actualizado correctamente"
@@ -96,23 +96,21 @@ public class DmgDoctosController(
         });
     }
 
-
-
     [IsAuthorized (alias: CC.THIRD_LEVEL_PERMISSION_DMGDOCTOS_CAN_UPDATE)]
     [HttpGet]
-    public async Task<JsonResult> GetOneDmgDocto([FromQuery] string ciaCod, [FromQuery] string doctoType)
+    public async Task<JsonResult> GetOneDmgDocto([FromQuery] string ciaCod, [FromQuery] int IdTipoPartida)
     {
         DmgDoctosResultSet? data;
 
         try
         {
-            data = await dmgDoctosRepository.GetOneDmgDoctoByCia(ciaCod, doctoType);
+            data = await dmgDoctosRepository.GetOneDmgDoctoByCia(ciaCod, IdTipoPartida);
         }
         catch (Exception e)
         {
             data = null;
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosController), nameof(GetOneDmgDocto));
+                nameof(TipoPartidaController), nameof(GetOneDmgDocto));
         }
 
         return Json(new
@@ -123,10 +121,8 @@ public class DmgDoctosController(
         }, new JsonSerializerOptions { PropertyNamingPolicy = null });
     }
 
-    [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_REPOSITORIO_CAN_ADD}," +
-                         $"{CC.THIRD_LEVEL_PERMISSION_REPOSITORIO_CAN_UPDATE}," +
-                         $"{CC.SECOND_LEVEL_PERMISSION_ADMIN_REPOSITORIO}," +
-                         $"{CC.SECOND_LEVEL_PERMISSION_ADMIN_DMGPOLIZA}")]
+    [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_DMGDOCTOS_CAN_ADD}," +
+                         $"{CC.THIRD_LEVEL_PERMISSION_DMGDOCTOS_CAN_UPDATE}")]
     [HttpGet]
     public async Task<JsonResult> GetToSelect2([FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize)
     {
@@ -140,7 +136,7 @@ public class DmgDoctosController(
         catch (Exception e)
         {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgDoctosController), nameof(GetToSelect2));
+                nameof(TipoPartidaController), nameof(GetToSelect2));
         }
 
         return Json(new

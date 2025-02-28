@@ -71,13 +71,13 @@ function startCiasValidation() {
             // COD_CIA: { required: true, minlength: 3, maxlength: 3 },
             RAZON_SOCIAL: { required: true, minlength: 3, maxlength: 60 },
             NOM_COMERCIAL: { required: true, minlength: 3, maxlength: 60 },
-            NRC: { required: true, minlength: 3, maxlength: 20 },
+            // NRC: { required: true, minlength: 3, maxlength: 20 },
         },
         messages:{
             // COD_CIA: 'Este campo es obligatorio',
             RAZON_SOCIAL: 'Este campo es obligatorio',
             NOM_COMERCIAL: 'Este campo es obligatorio',
-            NRC: 'Este campo es obligatorio',
+            //NRC: 'Este campo es obligatorio',
         },
         showErrors: function(errorMap, errorList) {
             this.defaultShowErrors();
@@ -114,12 +114,12 @@ function showCiasForm(id, makeCopy) {
 
     if (!isEditing && !isCopying) {
         initSelect2Paginated(
-            'COD_CIA',
+            'CofasaCias',
             '/Cias/GetToSelect2CofasaCias',
             'Compañias...'
         );
 
-        $("#COD_CIA").on('change', function (e) {
+        $("#CofasaCias").on('change', function (e) {
             loadCofasaCiaData(e.val)
         })
     }
@@ -129,6 +129,7 @@ function showCiasForm(id, makeCopy) {
     if (isEditing) {
         $('#IS_EDITING').val(id);
         $('#COD_CIA').val(id);
+        $('#COD_CIA').prop("readonly", true);
         $('#btnSaveCiaText').text('Editar');
         $('#companiaSelect').hide();
         loadOneCia(id);
@@ -219,6 +220,7 @@ function loadCofasaCiaData(id) {
 }
 
 function setDataToCiaForm(data) {
+    $('#COD_CIA').val(data.cod);
     $('#RAZON_SOCIAL').val(data.razonSocial);
     $('#NOM_COMERCIAL').val(data.nomComercial);
     $('#NRC').val(data.nrc);
