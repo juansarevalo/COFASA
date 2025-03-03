@@ -2,14 +2,11 @@ namespace CoreContable.Models.Dto;
 
 public class DmgDoctosDto
 {
-    public string? isUpdating { get; set; }
-    public string? COD_CIA { get; set; }
-    public string? TIPO_DOCTO { get; set; }
-    public string? TIPO_DOCTO_HOMOLOGAR { get; set; }
-    public int? CONTADOR_POLIZA { get; set; }
-    public string? DESCRIP_TIPO { get; set; }
-    public string? PROCESO { get; set; }
-    public string? POLIZA_MANUAL { get; set; }
+    public int IdTipoPartida { get; set; }
+    public string? CodCia { get; set; }
+    public string? TipoPartida { get; set; }
+    public string? TipoHomologar { get; set; }
+    public string? Nombre { get; set; }
     public string? UsuarioCreacion { get; set; }
     public DateTime? FechaCreacion { get; set; }
     public string? UsuarioModificacion { get; set; }

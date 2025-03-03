@@ -230,7 +230,7 @@
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #dbc59e;
 }
 .has-warning.select2-drop-active {
-    border-color: #301D71;
+    border-color: #4C81BB;
 }
 .has-warning.select2-drop-active.select2-drop.select2-drop-above {
   border-top-color: #a47e3c;
@@ -242,15 +242,15 @@
 }
 .has-error .select2-container-active .select2-choice,
 .has-error .select2-container-multi.select2-container-active .select2-choices {
-    border-color: #301D71;
+    border-color: #4C81BB;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
 }
 .has-error.select2-drop-active {
-    border-color: #301D71;
+    border-color: #4C81BB;
 }
     .has-error.select2-drop-active.select2-drop.select2-drop-above {
-        border-top-color: #301D71;
+        border-top-color: #4C81BB;
     }
 
 .has-success .select2-choice,
@@ -259,15 +259,15 @@
 }
 .has-success .select2-container-active .select2-choice,
 .has-success .select2-container-multi.select2-container-active .select2-choices {
-    border-color: #301D71;
+    border-color: #4C81BB;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
 }
 .has-success.select2-drop-active {
-    border-color: #301D71;
+    border-color: #4C81BB;
 }
     .has-success.select2-drop-active.select2-drop.select2-drop-above {
-        border-top-color: #301D71;
+        border-top-color: #4C81BB;
     }
 
 /**
@@ -276,7 +276,7 @@
  */
 .select2-container-active .select2-choice,
 .select2-container-multi.select2-container-active .select2-choices {
-    border-color: #301D71;
+    border-color: #4C81BB;
     outline: none;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
@@ -285,12 +285,12 @@
 }
 
 .select2-drop-active {
-    border-color: #301D71;
+    border-color: #4C81BB;
 }
 
 .select2-drop-auto-width,
 .select2-drop.select2-drop-above.select2-drop-active {
-    border-top-color: #301D71;
+    border-top-color: #4C81BB;
 }
 
 /**

@@ -28,6 +28,8 @@ public interface ICiasRepository
 
     Task<bool> CallUpdateCia(CiaDto cia);
 
+    Task<string> CallGenerateCiaCod();
+
     Task<CiaResultSet?> GetOneCia(string ciaCod);
 
     Task<int> GetCount();
@@ -166,6 +168,24 @@ public class CiasRepository(
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
                 nameof(SecurityRepository), nameof(CallUpdateCia));
             return false;
+        }
+    }
+
+    public async Task<string> CallGenerateCiaCod() {
+        try {
+            var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = "SELECT [CONTABLE].[Obtener_Codigo_Cia] ()";
+
+            if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
+            var result = (string)(await command.ExecuteScalarAsync())! ?? "";
+            if (command.Connection?.State == ConnectionState.Open) await dbContext.Database.CloseConnectionAsync();
+
+            return result;
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(SecurityRepository), nameof(CallGenerateCiaCod));
+            throw;
         }
     }
 

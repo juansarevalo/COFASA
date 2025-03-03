@@ -14,13 +14,22 @@ public class TipoEntradaCuentas
     [MaxLength(3)]
     public required string CodCia { get; set; }
 
-    public required int TipoEntrada { get; set; }
+    public required int NumTipoEntrada { get; set; }
+
+    [MaxLength(25)]
+    public required string TipoEntrada { get; set; }
 
     [MaxLength(15)]
-    public required string CodContable { get; set; }
+    public required string IdCatalogo { get; set; }
+
+    [MaxLength(9)]
+    public required string CentroCosto { get; set; }
 
     [MaxLength(5)]
     public required string TipoCuenta { get; set; }
+
+    [ForeignKey(CC.TIPOPARTIDA)]
+    public required int IdTipoPartida { get; set; }
 
     [MaxLength(30)]
     public required string FormaCalculo { get; set; }

@@ -116,10 +116,8 @@ public class CentroCostoController (
         }, new JsonSerializerOptions { PropertyNamingPolicy = null });
     }
 
-    [IsAuthorized (alias: $"{CC.FIST_LEVEL_PERMISSION_REPORTS}," +
-                         $"{CC.THIRD_LEVEL_PERMISSION_REPOSITORIO_CAN_ADD}," +
-                         $"{CC.THIRD_LEVEL_PERMISSION_REPOSITORIO_CAN_UPDATE}," +
-                         $"{CC.THIRD_LEVEL_PERMISSION_CENTROCOSTO_CAN_COPY}")]
+    [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_CENTROCOSTO_CAN_ADD}," +
+                         $"{CC.THIRD_LEVEL_PERMISSION_CENTROCOSTO_CAN_UPDATE}")]
     [HttpGet]
     public async Task<JsonResult> GetToSelect2 ([FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
         var ccostos = new List<Select2ResultSet> ( );

@@ -55,6 +55,7 @@ namespace CoreContable.Controllers {
             }
 
             try {
+                data.COD_CIA = await ciasRepository.CallGenerateCiaCod();
                 data.UsuarioCreacion = securityRepository.GetSessionUserName();
                 result = await ciasRepository.CallSaveCia(cia: data);
             }

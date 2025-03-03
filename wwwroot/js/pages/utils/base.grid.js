@@ -469,8 +469,8 @@ function initCalendar(id, format) {
 }
 
 function initTipoDoctoSelect(id, placeholder) {
-    // initSelect2Paginated(id, '/DmgDoctos/GetToSelect2', 'Tipo de documento');
-    initSelect2Paginated(id, '/DmgDoctos/GetToSelect2', placeholder);
+    // initSelect2Paginated(id, '/TipoPartida/GetToSelect2', 'Tipo de documento');
+    initSelect2Paginated(id, '/TipoPartida/GetToSelect2', placeholder);
 }
 
 function setSelect2Focus(id) {

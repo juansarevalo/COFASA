@@ -56,7 +56,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISecurityRepository, SecurityRepository>();
 builder.Services.AddScoped<ICiasRepository, CiasRepository>();
 builder.Services.AddScoped<IDmgCuentasRepository, DmgCuentasRepository>();
-builder.Services.AddScoped<IDmgDoctosRepository, DmgDoctosRepository>();
+builder.Services.AddScoped<ITipoPartidaRepository, TipoPartidaRepository>();
 builder.Services.AddScoped<ICentroCostoRepository, CentroCostoRepository>();
 builder.Services.AddScoped<ICentroCuentaRepository, CentroCuentaRepository>();
 builder.Services.AddScoped<ITipoEntradaCuentasRepository, TipoEntradaCuentasRepository>();

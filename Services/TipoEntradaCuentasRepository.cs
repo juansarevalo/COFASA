@@ -41,11 +41,14 @@ public class TipoEntradaCuentasRepository(
             command.CommandText = $"{CC.SCHEMA}.InsertarOActualizaTipoEntradaCuenta";
             command.CommandType = CommandType.StoredProcedure;
 
-            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.VarChar) { Value = data.Id });
+            command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int) { Value = data.Id });
             command.Parameters.Add(new SqlParameter("@CodCia", SqlDbType.VarChar) { Value = data.CodCia });
-            command.Parameters.Add(new SqlParameter("@TipoEntrada", SqlDbType.Int) { Value = data.TipoEntrada });
-            command.Parameters.Add(new SqlParameter("@CodContable", SqlDbType.VarChar) { Value = data.CodContable });
+            command.Parameters.Add(new SqlParameter("@NumTipoEntrada", SqlDbType.Int) { Value = data.NumTipoEntrada });
+            command.Parameters.Add(new SqlParameter("@TipoEntrada", SqlDbType.VarChar) { Value = data.TipoEntrada });
+            command.Parameters.Add(new SqlParameter("@IdCatalogo", SqlDbType.VarChar) { Value = data.IdCatalogo });
+            command.Parameters.Add(new SqlParameter("@CentroCosto", SqlDbType.VarChar) { Value = data.CentroCosto });
             command.Parameters.Add(new SqlParameter("@TipoCuenta", SqlDbType.VarChar) { Value = data.TipoCuenta });
+            command.Parameters.Add(new SqlParameter("@IdTipoPartida", SqlDbType.VarChar) { Value = data.IdTipoPartida });
             command.Parameters.Add(new SqlParameter("@FormaCalculo", SqlDbType.VarChar) { Value = data.FormaCalculo });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
