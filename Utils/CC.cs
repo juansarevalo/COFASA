@@ -34,7 +34,7 @@ public abstract class CC
     public const string CENTRO_CUENTA = "centro_cuenta";
     public const string COMPANIAS = "companias";
     public const string DMGCUENTAS = "dmgcuentas";
-    public const string DMGDOCTOS = "dmgdoctos";
+    public const string TIPOPARTIDA = "tipoPartida";
     public const string TIPOENTRADACUENTAS = "TipoEntradaCuentas";
     public const string PERMISSION = "Permission";
     public const string ROLE = "Role";
@@ -85,7 +85,7 @@ public abstract class CC
     public const string THIRD_LEVEL_PERMISSION_PARAMS_PERIOD_CAN_UPDATE = "PARAMS_PERIOD_CAN_UPDATE";
     public const string THIRD_LEVEL_PERMISSION_PARAMS_PERIOD_CAN_CHANGE_STATUS = "PARAMS_PERIOD_CAN_CHANGE_STATUS";
 
-    public const string SECOND_LEVEL_PERMISSION_ADMIN_DMGDOCTOS = "DMGDOCTOS";
+    public const string SECOND_LEVEL_PERMISSION_ADMIN_DMGDOCTOS = "TIPOPARTIDA";
     public const string THIRD_LEVEL_PERMISSION_DMGDOCTOS_CAN_ADD = "DMGDOCTOS_CAN_ADD";
     public const string THIRD_LEVEL_PERMISSION_DMGDOCTOS_CAN_UPDATE = "DMGDOCTOS_CAN_UPDATE";
 

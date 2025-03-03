@@ -103,7 +103,7 @@ public async Task<DataTableResultSet<List<DmgPolizaResultSet>>?> GetAllBy(DataTa
             .Where(entity => entity.COD_CIA == codCia);
 
         if (periodo != null) efQuery = efQuery.Where(entity => entity.PERIODO == periodo);
-        if (tipoDocto != null) efQuery = efQuery.Where(entity => entity.TIPO_DOCTO == tipoDocto);
+        if (tipoDocto != null) efQuery = efQuery.Where(entity => entity.TipoPartida == tipoDocto);
         if (numPoliza != null) efQuery = efQuery.Where(entity => entity.NUM_POLIZA == numPoliza);
         if (fechaInicio != null) efQuery = efQuery.Where(entity => entity.FECHA >= DateTimeUtils.ParseFromString(fechaInicio));
         if (fechaFin != null) efQuery = efQuery.Where(entity => entity.FECHA <= DateTimeUtils.ParseFromString(fechaFin));
@@ -127,7 +127,7 @@ public async Task<DataTableResultSet<List<DmgPolizaResultSet>>?> GetAllBy(DataTa
                 _ => efQuery.Where(entity =>
                     EF.Functions.Like(entity.COD_CIA, $"%{dataTabletDto.search}%") ||
                     EF.Functions.Like(entity.PERIODO.ToString(), $"%{dataTabletDto.search}%") ||
-                    EF.Functions.Like(entity.TIPO_DOCTO, $"%{dataTabletDto.search}%") ||
+                    EF.Functions.Like(entity.TipoPartida, $"%{dataTabletDto.search}%") ||
                     EF.Functions.Like(entity.NUM_POLIZA.ToString(), $"%{dataTabletDto.search}%") ||
                     EF.Functions.Like(entity.NUM_REFERENCIA, $"%{dataTabletDto.search}%")
                     // FECHA
@@ -148,7 +148,7 @@ public async Task<DataTableResultSet<List<DmgPolizaResultSet>>?> GetAllBy(DataTa
                 RowNum = entity.RowNum,
                 COD_CIA = entity.COD_CIA,
                 PERIODO = $"{entity.PERIODO}",
-                TIPO_DOCTO = entity.TIPO_DOCTO,
+                TipoPartida = entity.TipoPartida,
                 NUM_POLIZA = entity.NUM_POLIZA,
                 NUM_REFERENCIA = entity.NUM_REFERENCIA,
                 FECHA = entity.FECHA,

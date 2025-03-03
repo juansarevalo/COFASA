@@ -536,7 +536,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 .login-card-body .input-group .form-control.is-valid ~ .input-group-append .input-group-text,
 .register-card-body .input-group .form-control.is-valid ~ .input-group-prepend .input-group-text,
 .register-card-body .input-group .form-control.is-valid ~ .input-group-append .input-group-text {
-  border-color: #4caf50;
+  border-color: #71c77c;
 }
 
 .login-card-body .input-group .form-control.is-invalid:focus,
@@ -546,7 +546,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .login-card-body .input-group .form-control.is-invalid ~ .input-group-append .input-group-text,
 .register-card-body .input-group .form-control.is-invalid ~ .input-group-append .input-group-text {
-  border-color: #e53935;
+  border-color: #e2514e;
 }
 
 .login-card-body .input-group .input-group-text,
@@ -769,7 +769,7 @@ body.iframe-mode-fullscreen.layout-navbar-fixed .wrapper .content-wrapper {
 }
 
 .content-wrapper.iframe-mode .btn-iframe-close {
-  color: #e53935;
+  color: #e2514e;
   position: absolute;
   line-height: 1;
   right: .125rem;

@@ -36,9 +36,12 @@ function overrideInitDt() {
                 },
                 'columns': [
                     { 'data': 'Id' },
-                    { 'data': 'TipoEntrada'},
-                    { 'data': 'CodContable'},
+                    { 'data': 'NumTipoEntrada' },
+                    { 'data': 'TipoEntrada' },
+                    { 'data': 'IdCatalogo' },
+                    { 'data': 'CentroCosto' },
                     { 'data': 'TipoCuenta' },
+                    { 'data': 'IdTipoPartida' },
                     { 'data': 'FormaCalculo' },
                     {
                         sortable: false, searchable: false,
@@ -77,9 +80,21 @@ function overrideShowForm(id) {
     $('#CodCia').val($('#codCia').val());
 
     initSelect2Paginated(
-        'CodContable',
+        'IdCatalogo',
         '/DmgCuentas/GetToSelect2CofasaCatalogo',
         'Cuentas...'
+    );
+
+    initSelect2Paginated(
+        'CentroCosto',
+        '/CentroCosto/GetToSelect2',
+        'Centros de Costo...'
+    );
+
+    initSelect2Paginated(
+        'IdTipoPartida',
+        '/TipoPartida/GetToSelect2',
+        'Tipos de Asiento...'
     );
 
     if (isEditing) {
@@ -95,21 +110,8 @@ function overrideShowForm(id) {
 function overrideFormValidation() {
     initFormValidation({
         showErrorsCb: function (errorMap, errorList, validator) { validator.defaultShowErrors(); },
-        submitHandlerCb: function (form, event) { doSaveTipoEntCta({}); }
+        submitHandlerCb: function (form, event) { doSave({}); }
     });
-}
-
-function doSaveTipoEntCta({ success, error }) {
-    const columna1 = $('#Columna1').val();
-    const operacion = $('#Operacion').val();
-    const columna2 = $('#Columna2').val();
-
-    const formaCalculo = `${columna1} ${operacion} ${columna2}`;
-
-    let formData = $(`#${initValues.formID}`).serialize();
-
-    formData = formData + `&formaCalculo=${encodeURIComponent(formaCalculo)}`;
-    completeDoSave({ success, error, formData });
 }
 
 function overrideLoadOne(id) {
@@ -128,7 +130,7 @@ function setDataToForm(data) {
     if (!isDefined(data)) return;
 
     if (isDefined(data.TipoEntrada)) $('#TipoEntrada').val(data.TipoEntrada);
-    if (isDefined(data.CodContable)) $('#CodContable').val(data.CodContable);
+    if (isDefined(data.IdCatalogo)) $('#IdCatalogo').val(data.IdCatalogo);
     if (isDefined(data.TipoCuenta)) $('#TipoCuenta').val(data.TipoCuenta);
     if (isDefined(data.FormaCalculo)) $('#FormaCalculo').val(data.FormaCalculo);
 }
