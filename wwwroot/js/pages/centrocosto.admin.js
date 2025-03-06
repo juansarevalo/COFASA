@@ -60,7 +60,6 @@ function overrideInitDt() {
             bindButtons(function (action, data) {
                 if (action === 'edit') { overrideShowForm(data.COD_CIA, data.CENTRO_COSTO); }
                 if (action === 'accounts') { showCCGrid(data.COD_CIA, data.CENTRO_COSTO, data.DESCRIPCION); }
-                if (action === 'cc-do-copy') { showCopyForm(data.CENTRO_COSTO, data.DESCRIPCION); }
             });
         }
     );
@@ -113,7 +112,18 @@ function showCCGrid(codCia, codCentroCosto, description) {
 function overrideFormValidation() {
     initFormValidation({
         showErrorsCb: function (errorMap, errorList, validator) { validator.defaultShowErrors(); },
-        submitHandlerCb: function (form, event) { doSave({}); }
+        submitHandlerCb: function (form, event) {
+            if ($("#CENTRO_COSTO").val() || $("#CENTRO_COSTO_PADRE").val()) {
+                doSave({});
+            } else {
+                bootbox.confirm("No ha seleccionado un centro de costo padre, ¿Quiere continuar así?", function (result) {
+                    if (result) {
+                        doSave({});
+                    }
+                });
+            }
+            
+        }
     });
 }
 
@@ -136,64 +146,4 @@ function setDataToForm(data) {
     if (isDefined(data.CENTRO_COSTO)) $('#CENTRO_COSTO').val(data.CENTRO_COSTO);
     if (isDefined(data.DESCRIPCION)) $('#DESCRIPCION').val(data.DESCRIPCION);
     if (isDefined(data.ACEPTA_DATOS) && data.ACEPTA_DATOS === 'S') { $('#ACEPTA_DATOS').prop('checked', true) }
-}
-
-function validateCentroCostoCopyForm() {
-    $('#copyCcForm').validate({
-        rules: {
-            centroCosto: {required: true},
-            centroCosto2: {required: true}
-        },
-        submitHandler: function (form, event) {
-            if ($('#centroCosto').val() === $('#centroCosto2').val()) {
-                showToast(false, 'No puedes copiar el centro de costos en sí mismo');
-            } else {
-                doCcCopy();
-            }
-        }
-    });
-}
-
-function doCcCopy() {
-    isLoading('#copyCcButton', true);
-    const formData = $('#copyCcForm').serialize();
-
-    POST({
-        url: '/CentroCosto/DoCopy',
-        data: formData,
-        success: function (data) {
-            isLoading('#copyCcButton', false);
-            showToast(data.success, data.message);
-
-            if(data.success) {
-                hideForm(dialogCopyCC);
-                reloadTable();
-            }
-        },
-        error: function (err) {
-            showToast(false, 'Ocurrió un error al procesar la solicitud');
-            isLoading('#copyCcButton', false);
-        }
-    });
-}
-
-function initCentroCostoSelects(centroCostoId, centroCostoName) {
-    // initSelect2Local('centroCosto', {id: centroCostoId,text: centroCostoName}, 'Centro de costos');
-    initSelect2Local('centroCosto', [], 'Centro de costos');
-    $('#centroCosto').select2('data', {id: centroCostoId,text: `${centroCostoId} - ${centroCostoName}`}).change();
-    readOnlySelect2('#centroCosto', true);
-
-    initSelect2Paginated('centroCosto2', '/CentroCosto/GetToSelect2', 'Centro costo');
-}
-
-function showCopyForm(centroCostoId, centroCostoName) {
-    dialogCopyCC = bootbox.dialog({
-        title: 'Copiar centro de costos',
-        message: $('#ccCopyHtml').val(),
-        className: 'modalMedium',
-        onEscape: true
-    });
-
-    initCentroCostoSelects(centroCostoId, centroCostoName);
-    validateCentroCostoCopyForm();
 }

@@ -20,10 +20,20 @@ namespace CoreContable {
             modelBuilder.Entity<ValidateUserOnLoginFromFunctionResult>(e => e.HasNoKey());
             modelBuilder.Entity<ConsultarCentroCuentaFromFunc>(e => e.HasNoKey());
             modelBuilder.Entity<GetCofasaCodCiasFromFunctionResult>(e => e.HasNoKey());
-            modelBuilder.Entity<ConsultarCofasaCatalogoFromFunc>(e => e.HasNoKey());
+            modelBuilder.Entity<CofasaCatalogo>(e => e.HasNoKey());
+            modelBuilder.Entity<CofasaTipoMov>(e => e.HasNoKey());
 
-            // Varias llaves primarias
+
+            // Llaves primarias compuestas
+            modelBuilder.Entity<CentroCosto>().HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO });
             modelBuilder.Entity<CentroCuenta>().HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO, x.CTA_1, x.CTA_2, x.CTA_3, x.CTA_4, x.CTA_5, x.CTA_6 });
+
+            // LLaves foráneas compuestas
+            modelBuilder.Entity<TipoMovCuentas>()
+                .HasOne(te => te.CentroCosto)
+                .WithMany()
+                .HasForeignKey(te => new { te.CodCia, te.CentroCostoF }) 
+                .HasPrincipalKey(c => new { c.COD_CIA, c.CENTRO_COSTO });
 
             // Configuración de vistas existentes
             modelBuilder.Entity<CentroCuentaView>().ToView("vw_centro_cuenta").HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO, x.CTA_1, x.CTA_2, x.CTA_3, x.CTA_4, x.CTA_5, x.CTA_6 });
@@ -48,7 +58,11 @@ namespace CoreContable {
         public DbSet<TipoPartidaC> TipoPartida { get; set; }
         public DbSet<CentroCosto> CentroCosto { get; set; }
         public DbSet<CentroCuenta> CentroCuenta { get; set; }
-        public DbSet<TipoEntradaCuentas> TipoEntradaCuentas { get; set; }
+        public DbSet<TipoMovCuentas> TipoMovCuentas { get; set; }
+
+        //Cofasa
+        public DbSet<CofasaCatalogo> CofasaCatalogo { get; set; }
+        public DbSet<CofasaTipoMov> CofasaTipoMov { get; set; }
 
         // DbSets de vistas
         public DbSet<CentroCuentaView> CentroCuentaView { get; set; }
@@ -63,7 +77,5 @@ namespace CoreContable {
         public DbSet<ValidateUserOnLoginFromFunctionResult> ValidateUserOnLoginFromFunctionResult { get; set; }
         public DbSet<ConsultarCentroCuentaFromFunc> ConsultarCentroCuentaFromFunc { get; set; }
         public DbSet<GetCofasaCodCiasFromFunctionResult> GetCofasaCodCiasFromFunctionResult { get; set; }
-
-        public DbSet<ConsultarCofasaCatalogoFromFunc> ConsultarCofasaCatalogoFromFunc { get; set; }
     }
 }

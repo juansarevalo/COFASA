@@ -66,6 +66,7 @@ public class CentroCostoRepository (
     public Task<List<Select2ResultSet>> GetForSelect2 (string codCia, string? query = null, int pageNumber = 1, int pageSize = 10) {
         IQueryable<CentroCosto> efQuery = dbContext.CentroCosto
             .Where (entity => entity.COD_CIA == codCia) // Filtrar por COD_CIA
+            .Where (entity => entity.ACEPTA_DATOS == "S")
             .OrderBy(entity => entity.CENTRO_COSTO);
 
         // Si hay una búsqueda por query, agregarlo al filtro
