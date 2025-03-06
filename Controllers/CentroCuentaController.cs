@@ -118,9 +118,7 @@ public class CentroCuentaController (
             data = result
         }, new JsonSerializerOptions { PropertyNamingPolicy = null });
     }
-    [IsAuthorized (alias: $"{CC.FIST_LEVEL_PERMISSION_REPORTS}," +
-                       $"{CC.THIRD_LEVEL_PERMISSION_REPOSITORIO_CAN_ADD}," +
-                       $"{CC.THIRD_LEVEL_PERMISSION_REPOSITORIO_CAN_UPDATE}")]
+    [IsAuthorized (alias: CC.FIST_LEVEL_PERMISSION_REPORTS)]
     [HttpGet]
     public async Task<JsonResult> GetToSelect2 (
     [FromQuery] string codCia,

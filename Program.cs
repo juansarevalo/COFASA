@@ -59,7 +59,7 @@ builder.Services.AddScoped<IDmgCuentasRepository, DmgCuentasRepository>();
 builder.Services.AddScoped<ITipoPartidaRepository, TipoPartidaRepository>();
 builder.Services.AddScoped<ICentroCostoRepository, CentroCostoRepository>();
 builder.Services.AddScoped<ICentroCuentaRepository, CentroCuentaRepository>();
-builder.Services.AddScoped<ITipoEntradaCuentasRepository, TipoEntradaCuentasRepository>();
+builder.Services.AddScoped<ITipoMovCuentasRepository, TipoMovCuentasRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();

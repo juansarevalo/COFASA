@@ -53,17 +53,33 @@ public class CentroCostoController (
                 data.ACEPTA_DATOS = "N";
             }
 
+            //Creación
             if (data.isUpdating.IsNullOrEmpty ( )) {
                 data.FECHA_CREACION = DateTime.Now;
                 data.USUARIO_CREACION = securityRepository.GetSessionUserName ( );
                 isUpdating = false;
+
+                if (data.CENTRO_COSTO_PADRE != null && data.CENTRO_COSTO_PADRE[3..] != "000-00" && data.ACEPTA_DATOS != "S") {
+                    return Json(new {
+                        success = false,
+                        message = "Este centro de costo debe aceptar datos"
+                    });
+                }
             }
+            //Actualización
             else {
                 data.FECHA_MODIFICACION = DateTime.Now;
                 data.USUARIO_MODIFICACION = securityRepository.GetSessionUserName ( );
                 isUpdating = true;
 
-                if(data.ACEPTA_DATOS == "S") {
+                if (data.CENTRO_COSTO[7..] != "00" && data.ACEPTA_DATOS != "S") {
+                    return Json(new {
+                        success = false,
+                        message = "Este centro de costo debe aceptar datos"
+                    });
+                }
+
+                if (data.ACEPTA_DATOS == "S") {
                     var isExistsHijos = await centroCostoRepository.GetCentroCostoHijos(data.COD_CIA, data.CENTRO_COSTO);
 
                     if (isExistsHijos.Count != 0) {

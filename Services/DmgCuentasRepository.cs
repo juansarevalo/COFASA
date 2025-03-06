@@ -1,6 +1,5 @@
 using System.Data;
 using CoreContable.Entities;
-using CoreContable.Entities.FuntionResult;
 using CoreContable.Models.Dto;
 using CoreContable.Models.ResultSet;
 using CoreContable.Utils;
@@ -27,9 +26,9 @@ public interface IDmgCuentasRepository
 
     Task<bool> MayorizarMes (string codCia, int periodo, int año, int mes);
 
-    public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10);
+    Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10);
 
-    public Task<CofasaCatalogoResultSet?> GetCofasaCatalogData(string id);
+    Task<CofasaCatalogo?> GetCofasaCatalogDataById(int id);
 }
 
 public class DmgCuentasRepository(
@@ -216,17 +215,17 @@ public class DmgCuentasRepository(
 
     public Task<List<Select2ResultSet>> CallGetCofasaCatalogoForSelect2(string? query = null, int pageNumber = 1, int pageSize = 10) {
         try {
-            IQueryable<ConsultarCofasaCatalogoFromFunc> efQuery = dbContext.ConsultarCofasaCatalogoFromFunc
-                .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()");
+            IQueryable<CofasaCatalogo> efQuery = dbContext.CofasaCatalogo
+                .FromSqlRaw("SELECT * FROM contable.fn_get_catalogo({0})", DBNull.Value);
 
             if (!query.IsNullOrEmpty()) {
-                efQuery = dbContext.ConsultarCofasaCatalogoFromFunc
-                    .FromSqlRaw("SELECT * FROM contable.fn_get_ids_catalogo()")
-                    .Where(
+                efQuery = dbContext.CofasaCatalogo
+                .FromSqlRaw("SELECT * FROM contable.fn_get_catalogo({0})", DBNull.Value)                    
+                .Where(
                         entity =>
                             EF.Functions.Like(entity.codContable, $"%{query}%")
                             || EF.Functions.Like(entity.DESCRIP_ESP, $"%{query}%")
-                    );
+                );
             }
 
             var count = efQuery.Count();
@@ -248,18 +247,17 @@ public class DmgCuentasRepository(
         }
     }
 
-    public Task<CofasaCatalogoResultSet?> GetCofasaCatalogData(string id) {
+    public Task<CofasaCatalogo?> GetCofasaCatalogDataById(int id) {
         try {
-            var result = dbContext.ConsultarCofasaCatalogoFromFunc
+            var result = dbContext.CofasaCatalogo
                 .FromSqlRaw("SELECT * FROM contable.fn_get_catalogo({0})", id)
-                .Select(cuenta => CofasaCatalogoResultSet.EntityToResultSet(cuenta))
                 .FirstOrDefaultAsync();
             return result;
         }
         catch (Exception e) {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(SecurityRepository), nameof(GetCofasaCatalogData));
-            return Task.FromResult<CofasaCatalogoResultSet?>(null);
+                nameof(SecurityRepository), nameof(GetCofasaCatalogDataById));
+            return Task.FromResult<CofasaCatalogo?>(null);
         }
     }
 }

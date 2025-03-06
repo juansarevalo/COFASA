@@ -57,12 +57,12 @@ public class UsersController (
                 var userRoles = await userRoleRepository.GetUserUserRoles (userId, currentCia);
 
                 data.SelRoles = userRoles
-                    .GroupBy (ur => ur.IdRole)
+                    //.GroupBy (ur => ur.IdRole)
                     .Select (ur => new Select2ResultSet {
                         // id = $"{ur.IdRole}",
                         // text = ur.RoleName,
-                        id = $"{ur.First ( ).IdRole}",
-                        text = ur.First ( ).RoleName ?? ""
+                        id = ur.IdRole.ToString(),
+                        text = ur.RoleName ?? ""
                     })
                     .ToList ( );
                 data.OldRoles = data.SelRoles.Select (role => int.Parse (role.id)).ToList ( );

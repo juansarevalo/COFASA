@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CoreContable.Entities;
 using CoreContable.Models.Dto;
 using CoreContable.Models.ResultSet;
 using CoreContable.Services;
@@ -140,12 +141,12 @@ public class DmgCuentasController(
 
     [IsAuthorized(alias: CC.THIRD_LEVEL_PERMISSION_DMGCUENTAS_CAN_ADD)]
     [HttpGet]
-    public async Task<JsonResult> GetCofasaCatalogoDataById([FromQuery] string id) {
+    public async Task<JsonResult> GetCofasaCatalogoDataById([FromQuery] int id) {
         bool result;
-        CofasaCatalogoResultSet? cuenta = null;
+        CofasaCatalogo? cuenta = null;
 
         try {
-            cuenta = await dmgCuentasRepository.GetCofasaCatalogData(id);
+            cuenta = await dmgCuentasRepository.GetCofasaCatalogDataById(id);
             result = true;
         }
         catch (Exception e) {
@@ -156,7 +157,7 @@ public class DmgCuentasController(
 
         return Json(new {
             success = result,
-            message = result ? "Access data" : "Ocurrió un error al obtener los datos de la empresa",
+            message = result ? "Access data" : "Ocurrió un error al obtener los datos de el catálogo",
             data = cuenta
         }, new JsonSerializerOptions { PropertyNamingPolicy = null });
     }
