@@ -61,30 +61,6 @@ public class TipoMovCuentasController(
         });
     }
 
-    [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_ADD}," +
-                         $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_UPDATE}")]
-    [HttpGet]
-    public async Task<JsonResult> GetCofasaTipoMovData([FromQuery] string TipoMov, [FromQuery] int IdTipoMov) {
-        bool result;
-        CofasaTipoMov? cuenta = null;
-
-        try {
-            cuenta = await tipoMovCuentasRepository.GetCofasaTipoMovData(TipoMov, IdTipoMov);
-            result = true;
-        }
-        catch (Exception e) {
-            result = false;
-            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(DmgCuentasController), nameof(GetCofasaTipoMovData));
-        }
-
-        return Json(new {
-            success = result,
-            message = result ? "Access data" : "Ocurrió un error al obtener los datos del tipo de movimiento",
-            data = cuenta
-        }, new JsonSerializerOptions { PropertyNamingPolicy = null });
-    }
-
     [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_ADD}," + 
                          $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_UPDATE}")]
     [HttpPost]

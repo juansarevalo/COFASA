@@ -20,10 +20,22 @@ public class TipoMovCuentas
 
     public required int IdTipoMov { get; set; }
 
+    [MaxLength(15)]
+    public required string NombreTipoMov { get; set; }
+
     public required int IdCatalogo { get; set; }
+
+    [MaxLength(15)]
+    public required string codContable { get; set; }
+
+    [MaxLength(80)]
+    public required string NombreCatalogo { get; set; }
 
     [MaxLength(9)]
     public required string CentroCostoF { get; set; }
+
+    [MaxLength(200)]
+    public required string NombreCentroCosto { get; set; }
 
     [MaxLength(5)]
     public required string TipoCuenta { get; set; }
@@ -31,10 +43,9 @@ public class TipoMovCuentas
     [ForeignKey(CC.TIPOPARTIDA)]
     public required int IdTipoPartida { get; set; }
 
+    [MaxLength(100)]
+    public required string TipoPartida { get; set; }
+
     [MaxLength(30)]
     public required string FormaCalculo { get; set; }
-
-    public virtual CentroCosto? CentroCosto { get; set; }
-
-    public virtual TipoPartidaC? TipoPartida { get; set; }
 }

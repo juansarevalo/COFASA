@@ -29,8 +29,7 @@ public class TipoMovCuentasRepository(
     public Task<List<TipoMovCuentas>> GetAll (string codCia, string? query) {
         if (query.IsNullOrEmpty ( )) {
             return dbContext.TipoMovCuentas
-                .Include(entity => entity.CentroCosto)
-                .Include(entity => entity.TipoPartida)
+                .FromSqlRaw("SELECT * FROM [CONTABLE].[fn_get_tipo_mov_cuentas]({0})", DBNull.Value)
                 .Where(entity => entity.CodCia == codCia)
                 .ToListAsync ( );
         }
@@ -121,8 +120,6 @@ public class TipoMovCuentasRepository(
 
     public Task<TipoMovCuentas?> GetOne(int id) =>
         dbContext.TipoMovCuentas
-            .Include(entity => entity.CentroCosto)
-            .Include(entity => entity.TipoPartida)
-            .Where(entity => entity.Id == id)
+            .FromSqlRaw("SELECT * FROM [CONTABLE].[fn_get_tipo_mov_cuentas]({0})", id)
             .FirstOrDefaultAsync();
 }
