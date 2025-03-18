@@ -36,12 +36,23 @@ function overrideInitDt() {
                 },
                 'columns': [
                     { 'data': 'Id' },
-                    { 'data': 'TipoMov' },
-                    { 'data': 'IdTipoMov' },
-                    { 'data': 'IdCatalogo' },
+                    {
+                        'data': 'TipoMov',
+                        render: function (data, type, row) {
+                            if (data == 'Entrada') {
+                                return data
+                            } else if (data == 'SalidaC') {
+                                return 'Salida Costo'
+                            } else if (data == 'SalidaI') {
+                                return 'Salida Ingreso'
+                            }
+                        }
+                    },
+                    { 'data': 'NombreTipoMov' },
+                    { 'data': 'codContable' },
                     { 'data': 'CentroCostoF' },
                     { 'data': 'TipoCuenta' },
-                    { 'data': 'TipoPartida.TipoPartida' },
+                    { 'data': 'TipoPartida' },
                     { 'data': 'FormaCalculo' },
                     {
                         sortable: false, searchable: false,
@@ -131,7 +142,7 @@ function validateTipoMovFormSel2() {
         setSelect2Data('#IdTipoMov', null);
         $('#IdTipoMovLabel').text('Tipo...');
     } else {
-        $('#IdTipoMovLabel').text('Tipo ' + $('#TipoMov').val());
+        $('#IdTipoMovLabel').text('Tipo ' + ($('#TipoMov').val() == 'Entrada' ? 'Entrada' : 'Salida'));
         readOnlySelect2('#IdTipoMov', false);
         setSelect2Data('#IdTipoMov', null);
     }
@@ -163,32 +174,27 @@ async function setDataToForm(data) {
 
 
     //Tipo entrada/salida cofasa
-    const tipoMovFetch = await fetch(`/TipoMovCuentas/GetCofasaTipoMovData?TipoMov=${data.TipoMov}&IdTipoMov=${data.IdTipoMov}`);
-    const tipoMov = await tipoMovFetch.json()
-
     if (isDefined(data.IdTipoMov)) $('#IdTipoMov').select2('data', {
-        id: tipoMov.data.idTipoMov,
-        text: tipoMov.data.idTipoMov + " - " + tipoMov.data.nombre
+        id: data.IdTipoMov,
+        text: data.IdTipoMov + " - " + data.NombreTipoMov
     }).change();
 
 
     //Catalogo cofasa
-    const catalogoFetch = await fetch("/DmgCuentas/GetCofasaCatalogoDataById?id=" + data.IdCatalogo);
-    const catalogo = await catalogoFetch.json()
-
     if (isDefined(data.IdCatalogo)) $('#IdCatalogo').select2('data', {
-        id: catalogo.data.idCatalogo,
-        text: catalogo.data.codContable + " - " + catalogo.data.DESCRIP_ESP
+        id: data.IdCatalogo,
+        text: data.codContable + " - " + data.NombreCatalogo
     }).change();
 
 
-    if (isDefined(data.CentroCosto)) $('#CentroCostoF').select2('data', {
+    if (isDefined(data.CentroCostoF)) $('#CentroCostoF').select2('data', {
         id: data.CentroCostoF,
-        text: data.CentroCostoF + " - " + data.CentroCosto.DESCRIPCION
+        text: data.CentroCostoF + " - " + data.NombreCentroCosto
     }).change();
+
     if (isDefined(data.TipoPartida)) $('#IdTipoPartida').select2('data', {
         id: data.IdTipoPartida,
-        text: data.TipoPartida.TipoPartida + " - " + data.TipoPartida.Nombre
+        text: data.IdTipoPartida + " - " + data.TipoPartida
     }).change();
     if (isDefined(data.TipoCuenta)) $('#TipoCuenta').val(data.TipoCuenta);
     if (isDefined(data.FormaCalculo)) $('#FormaCalculo').val(data.FormaCalculo);

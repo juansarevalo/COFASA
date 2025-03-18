@@ -28,13 +28,6 @@ namespace CoreContable {
             modelBuilder.Entity<CentroCosto>().HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO });
             modelBuilder.Entity<CentroCuenta>().HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO, x.CTA_1, x.CTA_2, x.CTA_3, x.CTA_4, x.CTA_5, x.CTA_6 });
 
-            // LLaves foráneas compuestas
-            modelBuilder.Entity<TipoMovCuentas>()
-                .HasOne(te => te.CentroCosto)
-                .WithMany()
-                .HasForeignKey(te => new { te.CodCia, te.CentroCostoF }) 
-                .HasPrincipalKey(c => new { c.COD_CIA, c.CENTRO_COSTO });
-
             // Configuración de vistas existentes
             modelBuilder.Entity<CentroCuentaView>().ToView("vw_centro_cuenta").HasKey(x => new { x.COD_CIA, x.CENTRO_COSTO, x.CTA_1, x.CTA_2, x.CTA_3, x.CTA_4, x.CTA_5, x.CTA_6 });
 

@@ -169,6 +169,7 @@ public class TipoPartidaRepository(
                     .Where(
                         entity => 
                             EF.Functions.Like(entity.TipoPartida, $"%{query}%")
+                            || EF.Functions.Like(entity.TipoHomologar, $"%{query}%")
                             || EF.Functions.Like(entity.Nombre, $"%{query}%")
                     );
             }
@@ -181,7 +182,7 @@ public class TipoPartidaRepository(
                 .Select(entity => new Select2ResultSet
                 {
                     id = entity.IdTipoPartida.ToString(),
-                    text = entity.TipoPartida + " - " + entity.Nombre,
+                    text = entity.TipoPartida + " - " + entity.TipoHomologar + " - " + entity.Nombre,
                     more = pageNumber * pageSize < count
                 })
                 .ToListAsync();

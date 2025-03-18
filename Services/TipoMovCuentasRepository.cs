@@ -14,8 +14,6 @@ public interface ITipoMovCuentasRepository {
 
     Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string TipoMov, string? query = null, int pageNumber = 1, int pageSize = 10);
 
-    Task<CofasaTipoMov?> GetCofasaTipoMovData(string TipoMov, int IdTipoMov);
-
     Task<bool> SaveOrUpdate(TipoMovCuentas data);
 
     Task<TipoMovCuentas?> GetOne(int id);
@@ -29,8 +27,7 @@ public class TipoMovCuentasRepository(
     public Task<List<TipoMovCuentas>> GetAll (string codCia, string? query) {
         if (query.IsNullOrEmpty ( )) {
             return dbContext.TipoMovCuentas
-                .Include(entity => entity.CentroCosto)
-                .Include(entity => entity.TipoPartida)
+                .FromSqlRaw("SELECT * FROM [CONTABLE].[fn_get_tipo_mov_cuentas]({0})", DBNull.Value)
                 .Where(entity => entity.CodCia == codCia)
                 .ToListAsync ( );
         }
@@ -43,7 +40,7 @@ public class TipoMovCuentasRepository(
     public Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string TipoMov, string? query = null, int pageNumber = 1, int pageSize = 10) {
         try {
             IQueryable<CofasaTipoMov> efQuery = dbContext.CofasaTipoMov
-                .FromSqlRaw("EXEC [CONTABLE].[fn_get_tipo_mov] @TipoMov = {0}, @IdTipoMov = null", TipoMov);
+                .FromSqlRaw("EXEC [CONTABLE].[fn_get_tipo_mov] @TipoMov = {0}", TipoMov);
 
             var result = efQuery.AsEnumerable();
 
@@ -70,21 +67,6 @@ public class TipoMovCuentasRepository(
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
                 nameof(DmgCuentasRepository), nameof(CallGetCofasaIdTipoMovForSelect2));
             return Task.FromResult(new List<Select2ResultSet>());
-        }
-    }
-
-    public Task<CofasaTipoMov?> GetCofasaTipoMovData(string TipoMov, int IdTipoMov) {
-        try {
-            var result = dbContext.CofasaTipoMov
-                .FromSqlRaw("EXEC [CONTABLE].[fn_get_tipo_mov] @TipoMov = {0}, @IdTipoMov = {1}", TipoMov, IdTipoMov)
-                .AsEnumerable()
-                .FirstOrDefault();
-            return Task.FromResult(result);
-        }
-        catch (Exception e) {
-            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
-                nameof(SecurityRepository), nameof(GetCofasaTipoMovData));
-            return Task.FromResult<CofasaTipoMov?>(null);
         }
     }
 
@@ -121,8 +103,6 @@ public class TipoMovCuentasRepository(
 
     public Task<TipoMovCuentas?> GetOne(int id) =>
         dbContext.TipoMovCuentas
-            .Include(entity => entity.CentroCosto)
-            .Include(entity => entity.TipoPartida)
-            .Where(entity => entity.Id == id)
+            .FromSqlRaw("SELECT * FROM [CONTABLE].[fn_get_tipo_mov_cuentas]({0})", id)
             .FirstOrDefaultAsync();
 }
