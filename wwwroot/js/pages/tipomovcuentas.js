@@ -37,7 +37,7 @@ function overrideInitDt() {
                 'columns': [
                     { 'data': 'Id' },
                     {
-                        'data': 'TipoMov',
+                        'data': 'NombreMov',
                         render: function (data, type, row) {
                             if (data == 'Entrada') {
                                 return data
@@ -94,11 +94,11 @@ function overrideShowForm(id) {
     initSelect2Paginated(
         'IdTipoMov',
         '/TipoMovCuentas/GetToSelect2CofasaIdTipoMov',
-        'Nombre Movimiento...',
+        'Tipo Movimiento...',
         false,
         function (term, page) {
             return {
-                TipoMov: $('#TipoMov').val(),
+                NombreMov: $('#NombreMov').val(),
                 q: term,
                 page: page || 1,
                 pageSize: 10
@@ -115,13 +115,13 @@ function overrideShowForm(id) {
     initSelect2Paginated(
         'CentroCostoF',
         '/CentroCosto/GetToSelect2',
-        'Centros de Costo...'
+        'Centros de Costos...'
     );
 
     initSelect2Paginated(
         'IdTipoPartida',
         '/TipoPartida/GetToSelect2',
-        'Tipos de Asiento...'
+        'Nombres de Asiento...'
     );
 
     if (isEditing) {
@@ -132,17 +132,18 @@ function overrideShowForm(id) {
     }
 
     validateTipoMovFormSel2();
-    $('#TipoMov').on('change', function () { validateTipoMovFormSel2(); });
+    $('#NombreMov').on('change', function () { validateTipoMovFormSel2(); });
     overrideFormValidation();
 }
 
 function validateTipoMovFormSel2() {
-    if ($('#TipoMov').val() === '') {
+    if ($('#NombreMov').val() === '') {
         readOnlySelect2('#IdTipoMov', true);
         setSelect2Data('#IdTipoMov', null);
         $('#IdTipoMovLabel').text('Tipo...');
     } else {
-        $('#IdTipoMovLabel').text('Tipo ' + ($('#TipoMov').val() == 'Entrada' ? 'Entrada' : 'Salida'));
+        let NombreMov = $('#NombreMov').val();
+        $('#IdTipoMovLabel').text('Tipo ' + (NombreMov == 'SalidaC' ? 'Salida al Costo' : NombreMov == 'SalidaI' ? 'Reconocimiento de Ingresos' : 'Entrada'));
         readOnlySelect2('#IdTipoMov', false);
         setSelect2Data('#IdTipoMov', null);
     }
@@ -170,7 +171,7 @@ function overrideLoadOne(id) {
 async function setDataToForm(data) {
     if (!isDefined(data)) return;
 
-    if (isDefined(data.TipoMov)) $('#TipoMov').val(data.TipoMov).trigger('change');
+    if (isDefined(data.NombreMov)) $('#NombreMov').val(data.NombreMov).trigger('change');
 
 
     //Tipo entrada/salida cofasa

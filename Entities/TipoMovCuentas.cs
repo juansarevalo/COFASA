@@ -16,7 +16,7 @@ public class TipoMovCuentas
     public required string CodCia { get; set; }
 
     [MaxLength(10)]
-    public required string TipoMov { get; set; }
+    public required string NombreMov { get; set; }
 
     public required int IdTipoMov { get; set; }
 

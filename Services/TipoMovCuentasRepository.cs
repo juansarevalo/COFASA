@@ -12,7 +12,7 @@ namespace CoreContable.Services;
 public interface ITipoMovCuentasRepository {
     Task<List<TipoMovCuentas>> GetAll (string codCia, string? query);
 
-    Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string TipoMov, string? query = null, int pageNumber = 1, int pageSize = 10);
+    Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string NombreMov, string? query = null, int pageNumber = 1, int pageSize = 10);
 
     Task<bool> SaveOrUpdate(TipoMovCuentas data);
 
@@ -37,10 +37,10 @@ public class TipoMovCuentasRepository(
                 .ToListAsync();
     }
 
-    public Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string TipoMov, string? query = null, int pageNumber = 1, int pageSize = 10) {
+    public Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string NombreMov, string? query = null, int pageNumber = 1, int pageSize = 10) {
         try {
             IQueryable<CofasaTipoMov> efQuery = dbContext.CofasaTipoMov
-                .FromSqlRaw("EXEC [CONTABLE].[fn_get_tipo_mov] @TipoMov = {0}", TipoMov);
+                .FromSqlRaw("EXEC [CONTABLE].[fn_get_tipo_mov] @NombreMov = {0}", NombreMov);
 
             var result = efQuery.AsEnumerable();
 
@@ -79,7 +79,7 @@ public class TipoMovCuentasRepository(
 
             command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int) { Value = data.Id });
             command.Parameters.Add(new SqlParameter("@CodCia", SqlDbType.VarChar) { Value = data.CodCia });
-            command.Parameters.Add(new SqlParameter("@TipoMov", SqlDbType.VarChar) { Value = data.TipoMov });
+            command.Parameters.Add(new SqlParameter("@NombreMov", SqlDbType.VarChar) { Value = data.NombreMov });
             command.Parameters.Add(new SqlParameter("@IdTipoMov", SqlDbType.VarChar) { Value = data.IdTipoMov });
             command.Parameters.Add(new SqlParameter("@IdCatalogo", SqlDbType.VarChar) { Value = data.IdCatalogo });
             command.Parameters.Add(new SqlParameter("@CentroCosto", SqlDbType.VarChar) { Value = data.CentroCostoF });

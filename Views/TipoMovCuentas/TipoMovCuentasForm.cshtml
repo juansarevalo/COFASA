@@ -9,12 +9,12 @@
 
         <div class="row">
             <div class="form-group col-5">
-                <label for="TipoMov" class="form-label">Tipo Movimiento</label>
-                <select class="form-control" id="TipoMov" name="TipoMov" jv-required="true" jv-minlength="1" jv-maxlength="5">
+                <label for="NombreMov" class="form-label">Nombre Movimiento</label>
+                <select class="form-control" id="NombreMov" name="NombreMov" jv-required="true" jv-minlength="1" jv-maxlength="5">
                     <option value="">Seleccione un valor</option>
                     <option value="Entrada">Entrada</option>
                     <option value="SalidaC">Salida al costo</option>
-                    <option value="SalidaI">Reconocimiento de ingresos</option>
+                    <option value="SalidaI">Reconocimiento de Ingresos</option>
                 </select>
             </div>
 
@@ -25,33 +25,33 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="IdCatalogo">Cuenta</label> @* Viene de: DmgCuentas *@
+            <label class="form-label" for="IdCatalogo">Cuenta Contable</label> @* Viene de: DmgCuentas *@
             <input type="hidden" class="form-control" id="IdCatalogo" name="IdCatalogo" jv-required="true" />
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="CentroCosto">Centro de Costo</label>
+            <label class="form-label" for="CentroCosto">Centro de Costos</label>
             <input type="hidden" class="form-control" id="CentroCostoF" name="CentroCostoF" jv-required="true" />
         </div>
 
         <div class="row">
-            <div class="form-group col-8">
-                <label class="form-label" for="IdTipoPartida">Tipo Asiento Contable</label>
-                <input type="hidden" class="form-control" id="IdTipoPartida" name="IdTipoPartida" jv-required="true" />
-            </div>
-
             <div class="form-group col-4">
-                <label for="TipoCuenta" class="form-label">Tipo Cuenta</label>
+                <label for="TipoCuenta" class="form-label">Tipo Asiento</label>
                 <select class="form-control" id="TipoCuenta" name="TipoCuenta" jv-required="true" jv-minlength="1" jv-maxlength="5">
                     <option value="">Seleccione un valor</option>
                     <option value="CARGO">Cargo</option>
                     <option value="ABONO">Abono</option>
                 </select>
             </div>
+
+            <div class="form-group col-8">
+                <label class="form-label" for="IdTipoPartida">Nombre Asiento</label>
+                <input type="hidden" class="form-control" id="IdTipoPartida" name="IdTipoPartida" jv-required="true" />
+            </div>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="FormaCalculo">Forma Cálculo</label>
+            <label class="form-label" for="FormaCalculo">Forma de Cálculo</label>
             <input type="text" class="form-control" id="FormaCalculo" name="FormaCalculo" jv-required="true" />
         </div>
 

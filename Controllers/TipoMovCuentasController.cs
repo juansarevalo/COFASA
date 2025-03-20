@@ -44,11 +44,11 @@ public class TipoMovCuentasController(
     [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_ADD}," +
                          $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_UPDATE}")]
     [HttpGet]
-    public async Task<JsonResult> GetToSelect2CofasaIdTipoMov([FromQuery] string TipoMov, [FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
+    public async Task<JsonResult> GetToSelect2CofasaIdTipoMov([FromQuery] string NombreMov, [FromQuery] string q, [FromQuery] int page, [FromQuery] int pageSize) {
         var catalogo = new List<Select2ResultSet>();
 
         try {
-            catalogo = await tipoMovCuentasRepository.CallGetCofasaIdTipoMovForSelect2(TipoMov, q, page, pageSize);
+            catalogo = await tipoMovCuentasRepository.CallGetCofasaIdTipoMovForSelect2(NombreMov, q, page, pageSize);
         }
         catch (Exception e) {
             logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
