@@ -48,4 +48,11 @@ public class TipoMovCuentas
 
     [MaxLength(30)]
     public required string FormaCalculo { get; set; }
+
+    public required int IdPais {  get; set; }
+
+    [MaxLength(50)]
+    public required string NombrePais { get; set; }
+
+    public required string RetencionIVA { get; set; }
 }

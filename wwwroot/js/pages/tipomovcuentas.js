@@ -124,6 +124,12 @@ function overrideShowForm(id) {
         'Nombres de Asiento...'
     );
 
+    initSelect2Paginated(
+        'IdPais',
+        '/TipoMovCuentas/GetToSelect2CofasaIdPais',
+        'Pais...'
+    );
+
     if (isEditing) {
         $('#Id').val(id);
         $(`#${initValues.formAddButtonTextId}`).text('Editar');
@@ -173,7 +179,6 @@ async function setDataToForm(data) {
 
     if (isDefined(data.NombreMov)) $('#NombreMov').val(data.NombreMov).trigger('change');
 
-
     //Tipo entrada/salida cofasa
     if (isDefined(data.IdTipoMov)) $('#IdTipoMov').select2('data', {
         id: data.IdTipoMov,
@@ -199,4 +204,10 @@ async function setDataToForm(data) {
     }).change();
     if (isDefined(data.TipoCuenta)) $('#TipoCuenta').val(data.TipoCuenta);
     if (isDefined(data.FormaCalculo)) $('#FormaCalculo').val(data.FormaCalculo);
+
+    if (isDefined(data.TipoPartida)) $('#IdPais').select2('data', {
+        id: data.IdPais,
+        text: data.IdPais + " - " + data.NombrePais
+    }).change();
+    if (isDefined(data.RetencionIVA)) data.RetencionIVA == "S" && $('#RetencionIVA').prop('checked', true)
 }
