@@ -124,6 +124,12 @@ function overrideShowForm(id) {
         'Nombres de Asiento...'
     );
 
+    initSelect2Paginated(
+        'IdPais',
+        '/TipoMovCuentas/GetToSelect2CofasaIdPais',
+        'Pais...'
+    );
+
     if (isEditing) {
         $('#Id').val(id);
         $(`#${initValues.formAddButtonTextId}`).text('Editar');
@@ -143,7 +149,19 @@ function validateTipoMovFormSel2() {
         $('#IdTipoMovLabel').text('Tipo...');
     } else {
         let NombreMov = $('#NombreMov').val();
-        $('#IdTipoMovLabel').text('Tipo ' + (NombreMov == 'SalidaC' ? 'Salida al Costo' : NombreMov == 'SalidaI' ? 'Reconocimiento de Ingresos' : 'Entrada'));
+        let NombreSelect = 'Tipo ';
+
+        if (NombreMov == 'Entrada') {
+            NombreSelect += NombreMov;
+        } else if (NombreMov == 'SalidaC') {
+            NombreSelect += 'Salida al Costo';
+        } else if (NombreMov == 'SalidaI') {
+            NombreSelect += 'Reconocimiento de Ingresos';
+        } else if (NombreMov == 'SalidaCE') {
+            NombreSelect += 'Salida al Costo Especial';
+        }
+
+        $('#IdTipoMovLabel').text(NombreSelect);
         readOnlySelect2('#IdTipoMov', false);
         setSelect2Data('#IdTipoMov', null);
     }
@@ -173,7 +191,6 @@ async function setDataToForm(data) {
 
     if (isDefined(data.NombreMov)) $('#NombreMov').val(data.NombreMov).trigger('change');
 
-
     //Tipo entrada/salida cofasa
     if (isDefined(data.IdTipoMov)) $('#IdTipoMov').select2('data', {
         id: data.IdTipoMov,
@@ -199,4 +216,10 @@ async function setDataToForm(data) {
     }).change();
     if (isDefined(data.TipoCuenta)) $('#TipoCuenta').val(data.TipoCuenta);
     if (isDefined(data.FormaCalculo)) $('#FormaCalculo').val(data.FormaCalculo);
+
+    if (isDefined(data.TipoPartida)) $('#IdPais').select2('data', {
+        id: data.IdPais,
+        text: data.IdPais + " - " + data.NombrePais
+    }).change();
+    if (isDefined(data.RetencionIVA)) data.RetencionIVA == "S" && $('#RetencionIVA').prop('checked', true)
 }

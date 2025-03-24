@@ -61,6 +61,27 @@ public class TipoMovCuentasController(
         });
     }
 
+    [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_ADD}," +
+                         $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_UPDATE}")]
+    [HttpGet]
+    public async Task<JsonResult> GetToSelect2CofasaIdPais([FromQuery] string q) {
+        var pais = new List<Select2ResultSet>();
+
+        try {
+            pais = await tipoMovCuentasRepository.CallGetCofasaIdPaisForSelect2(q);
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(DmgCuentasController), nameof(GetToSelect2CofasaIdTipoMov));
+        }
+
+        return Json(new {
+            results = pais,
+            more = false
+        });
+    }
+
+
     [IsAuthorized(alias: $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_ADD}," + 
                          $"{CC.THIRD_LEVEL_PERMISSION_TIPO_MOV_CUENTAS_CAN_UPDATE}")]
     [HttpPost]

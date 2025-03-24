@@ -20,8 +20,10 @@ namespace CoreContable {
             modelBuilder.Entity<ValidateUserOnLoginFromFunctionResult>(e => e.HasNoKey());
             modelBuilder.Entity<ConsultarCentroCuentaFromFunc>(e => e.HasNoKey());
             modelBuilder.Entity<GetCofasaCodCiasFromFunctionResult>(e => e.HasNoKey());
+
             modelBuilder.Entity<CofasaCatalogo>(e => e.HasNoKey());
             modelBuilder.Entity<CofasaTipoMov>(e => e.HasNoKey());
+            modelBuilder.Entity<CofasaPais>(e => e.HasNoKey());
 
 
             // Llaves primarias compuestas
@@ -56,6 +58,7 @@ namespace CoreContable {
         //Cofasa
         public DbSet<CofasaCatalogo> CofasaCatalogo { get; set; }
         public DbSet<CofasaTipoMov> CofasaTipoMov { get; set; }
+        public DbSet<CofasaPais> CofasaPais { get; set; }
 
         // DbSets de vistas
         public DbSet<CentroCuentaView> CentroCuentaView { get; set; }
