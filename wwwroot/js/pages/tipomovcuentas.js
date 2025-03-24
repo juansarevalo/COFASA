@@ -149,7 +149,19 @@ function validateTipoMovFormSel2() {
         $('#IdTipoMovLabel').text('Tipo...');
     } else {
         let NombreMov = $('#NombreMov').val();
-        $('#IdTipoMovLabel').text('Tipo ' + (NombreMov == 'SalidaC' ? 'Salida al Costo' : NombreMov == 'SalidaI' ? 'Reconocimiento de Ingresos' : 'Entrada'));
+        let NombreSelect = 'Tipo ';
+
+        if (NombreMov == 'Entrada') {
+            NombreSelect += NombreMov;
+        } else if (NombreMov == 'SalidaC') {
+            NombreSelect += 'Salida al Costo';
+        } else if (NombreMov == 'SalidaI') {
+            NombreSelect += 'Reconocimiento de Ingresos';
+        } else if (NombreMov == 'SalidaCE') {
+            NombreSelect += 'Salida al Costo Especial';
+        }
+
+        $('#IdTipoMovLabel').text(NombreSelect);
         readOnlySelect2('#IdTipoMov', false);
         setSelect2Data('#IdTipoMov', null);
     }
