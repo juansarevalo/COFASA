@@ -14,6 +14,8 @@ public interface ITipoMovCuentasRepository {
 
     Task<List<Select2ResultSet>> CallGetCofasaIdTipoMovForSelect2(string NombreMov, string? query = null, int pageNumber = 1, int pageSize = 10);
 
+    Task<List<Select2ResultSet>> CallGetCofasaIdPaisForSelect2(string? query = null);
+
     Task<bool> SaveOrUpdate(TipoMovCuentas data);
 
     Task<TipoMovCuentas?> GetOne(int id);
@@ -70,6 +72,37 @@ public class TipoMovCuentasRepository(
         }
     }
 
+    public Task<List<Select2ResultSet>> CallGetCofasaIdPaisForSelect2(string? query = null) {
+        try {
+            IQueryable<CofasaPais> efQuery = dbContext.CofasaPais
+                .FromSqlRaw("SELECT * FROM [CONTABLE].[fn_get_pais]({0})", DBNull.Value);
+
+            var result = efQuery.AsEnumerable();
+
+            if (!query.IsNullOrEmpty()) {
+                result = result
+                    .Where(entity => entity.nombre.Contains(query, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var count = result.Count();
+
+            var paginatedList = result
+                .Select(entity => new Select2ResultSet {
+                    id = entity.idPais.ToString(),
+                    text = entity.idPais + " - " + entity.nombre,
+                    more = false
+                })
+                .ToList();
+
+            return Task.FromResult(paginatedList);
+        }
+        catch (Exception e) {
+            logger.LogError(e, "Ocurrió un error en {Class}.{Method}",
+                nameof(DmgCuentasRepository), nameof(CallGetCofasaIdTipoMovForSelect2));
+            return Task.FromResult(new List<Select2ResultSet>());
+        }
+    }
+
     public async Task<bool> SaveOrUpdate(TipoMovCuentas data) {
         var command = dbContext.Database.GetDbConnection().CreateCommand();
 
@@ -86,6 +119,8 @@ public class TipoMovCuentasRepository(
             command.Parameters.Add(new SqlParameter("@TipoCuenta", SqlDbType.VarChar) { Value = data.TipoCuenta });
             command.Parameters.Add(new SqlParameter("@IdTipoPartida", SqlDbType.VarChar) { Value = data.IdTipoPartida });
             command.Parameters.Add(new SqlParameter("@FormaCalculo", SqlDbType.VarChar) { Value = data.FormaCalculo });
+            command.Parameters.Add(new SqlParameter("@IdPais", SqlDbType.Int) { Value = data.IdPais });
+            command.Parameters.Add(new SqlParameter("@RetencionIVA", SqlDbType.Char) { Value = data.RetencionIVA ?? "N" });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
