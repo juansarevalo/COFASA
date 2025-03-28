@@ -54,5 +54,6 @@ public class TipoMovCuentas
     [MaxLength(50)]
     public required string NombrePais { get; set; }
 
-    public required string RetencionIVA { get; set; }
+    [MaxLength(1)]
+    public required string ParteRel { get; set; }
 }

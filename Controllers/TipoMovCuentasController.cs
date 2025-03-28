@@ -98,8 +98,8 @@ public class TipoMovCuentasController(
             result = false;
         }
 
-        var message = isUpdating ? "Cuenta asociada a tipo de entrada actualizado correctamente"
-            : "Cuenta asociada a tipo de entrada correctamente";
+        var message = isUpdating ? "Cuenta asociada a movimiento actualizado correctamente"
+            : "Cuenta asociada a tipo de movimiento correctamente";
 
         var errorMessage = isUpdating ? "Ocurrió un error al actualizar el registro"
             : "Ocurrió un error al asociar el registro";
