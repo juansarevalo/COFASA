@@ -45,6 +45,8 @@ function overrideInitDt() {
                                 return 'Salida Costo'
                             } else if (data == 'SalidaI') {
                                 return 'Salida Ingreso'
+                            } else if (data == 'SalidaCE') {
+                                return 'Salida Especial'
                             }
                         }
                     },
