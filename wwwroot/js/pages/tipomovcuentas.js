@@ -89,6 +89,7 @@ function overrideShowForm(id) {
     });
 
     $('#CodCia').val($('#codCia').val());
+    $('#ParteRelDiv').hide();
 
     //Seleccionar tipo entrada/salida
     initSelect2Paginated(
@@ -151,12 +152,15 @@ function validateTipoMovFormSel2() {
         let NombreMov = $('#NombreMov').val();
         let NombreSelect = 'Tipo ';
 
+        $('#ParteRelDiv').hide();
+
         if (NombreMov == 'Entrada') {
             NombreSelect += NombreMov;
         } else if (NombreMov == 'SalidaC') {
             NombreSelect += 'Salida al Costo';
         } else if (NombreMov == 'SalidaI') {
             NombreSelect += 'Reconocimiento de Ingresos';
+            $('#ParteRelDiv').show();
         } else if (NombreMov == 'SalidaCE') {
             NombreSelect += 'Salida al Costo Especial';
         }
@@ -221,5 +225,5 @@ async function setDataToForm(data) {
         id: data.IdPais,
         text: data.IdPais + " - " + data.NombrePais
     }).change();
-    if (isDefined(data.RetencionIVA)) data.RetencionIVA == "S" && $('#RetencionIVA').prop('checked', true)
+    if (isDefined(data.ParteRel)) data.ParteRel == "S" && $('#ParteRel').prop('checked', true);
 }
