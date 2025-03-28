@@ -120,7 +120,7 @@ public class TipoMovCuentasRepository(
             command.Parameters.Add(new SqlParameter("@IdTipoPartida", SqlDbType.VarChar) { Value = data.IdTipoPartida });
             command.Parameters.Add(new SqlParameter("@FormaCalculo", SqlDbType.VarChar) { Value = data.FormaCalculo });
             command.Parameters.Add(new SqlParameter("@IdPais", SqlDbType.Int) { Value = data.IdPais });
-            command.Parameters.Add(new SqlParameter("@RetencionIVA", SqlDbType.Char) { Value = data.RetencionIVA ?? "N" });
+            command.Parameters.Add(new SqlParameter("@ParteRel", SqlDbType.Char) { Value = data.ParteRel ?? "N" });
 
             if (command.Connection?.State != ConnectionState.Open) await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
